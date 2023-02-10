@@ -1,12 +1,15 @@
-import Step from "./step"; 
+import { Step } from "./step"; 
 
-export interface JHA {
-  UID: string, 
-  JobTaskTitle: string, 
-  Author: string,
-  Company: string,
-  Occupation: string,
-  DateRecorded: Date,
-  DatePosted: Date,
-  JobTaskSteps: Step[], 
-}
+/**
+ * Type definition for a Job Hazard Analysis document
+ * Contains general metadata as well as a list of Step objects.
+ */
+export type JobHazardDocument = JobHazardDocumentData; 
+export interface JobHazardDocumentData {
+  uid: string, 
+  title: string, 
+  author: string,
+  dateRecorded: Date | string,
+  datePosted: Date | string,
+  steps: Step[],
+};
