@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { JobHazardDocument } from "../types/jha";
 import { Step } from "../types/step";
 import { CreateButton } from "./Inputs";
-import { StepForm } from './StepForm';
+import StepForm from './StepForm';
 
 export interface DocumentFormProps {
   document?: JobHazardDocument;
