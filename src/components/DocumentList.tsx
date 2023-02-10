@@ -2,13 +2,12 @@ import DocumentCard from './DocumentCard';
 import { toOk, isOk, Result, toErr } from '../types/result';
 import { JobHazardDocument, JobHazardDocumentError } from '../types/jha';
 import { useEffect, useState } from 'react';
+import { fetchAllDocuments } from '../services/jha-service';
 
 const DocumentList = (): JSX.Element => {
 
   const [allDocuments, setAllDocuments] = useState<JobHazardDocument[]>([]);
-
-  const fetchAllDocuments = () => {return new JobHazardDocumentError('stub', 'document-not-found');}
-
+  
   const getDocuments = async (): Promise<Result<JobHazardDocument[], JobHazardDocumentError>> => {
     const documents = await fetchAllDocuments();
     if (isOk(documents)) {
