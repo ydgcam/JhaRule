@@ -1,25 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material';
+import THEME from './components/Theme';
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import LoginPage from './scenes/login/index';
+import AppHeader from './components/AppHeader';
+import LandingPage from './scenes/landing/index';
+import CreatePage from './scenes/document/create/index';
+import EditPage from './scenes/document/edit/index';
+import DocumentList from './scenes/document/index';
+import ProfilePage from './scenes/profile/index';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={THEME}>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<LoginPage />} />
+          <Route element={<AppHeader />}>
+            <Route path='/documents' element={<LandingPage />}>
+              <Route index element={<DocumentList />} />
+              <Route path='create' element={<CreatePage /> }/>
+              <Route path=':docId' element={<EditPage />} />
+            </Route>
+            <Route path='/profile' element={<ProfilePage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 
