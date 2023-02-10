@@ -7,7 +7,6 @@ export type Hazard = JobStepHazard;
 export interface JobStepHazard {
   uid: string, 
   stepId: string,
-  jhaId: string, 
   risk: string,
   control: string,
 };
