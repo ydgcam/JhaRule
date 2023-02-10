@@ -1,9 +1,10 @@
 /**************************/
 /** TextField Components **/
 /**************************/
-
-import { Tooltip, TextField, InputAdornment, MenuItem } from "@mui/material";
-import { Lock, Email } from '@mui/icons-material';
+import { styled } from '@mui/material/styles';
+import { ExpandMore } from '@mui/icons-material';
+import { Tooltip, TextField, InputAdornment, MenuItem, Button, IconButton, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Lock, Email, DeleteForever, Edit } from '@mui/icons-material';
 import React from "react";
 
 /**
@@ -77,5 +78,122 @@ export const TextFieldSelect = (props: TextFieldSelectProps): JSX.Element => {
         )) 
       }
     </TextField>
+  );
+};
+
+/*******************************/
+/*** Pulldown-menu Component ***/
+/*******************************/
+/**
+ * @property expand: state value controlling whether or not component content is visible
+ * @property onClick: function that sets value of 'expand' 
+ */
+export interface ExpandMoreCompProps { 
+  expand: boolean, 
+  onClick: React.MouseEventHandler 
+}
+export const ExpandMoreComp = styled((props: ExpandMoreCompProps): JSX.Element => {
+  const { expand, ...other } = props;
+  return <ExpandMore {...other} />;
+})(({ theme, expand }) => ({ //
+  transform: !expand ? 
+    'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
+/**************************/
+/*** Card UI Components ***/
+/**************************/
+
+/** NEEDS TO BE FURTHER ABSTRACTED */
+
+//Styling rules for Card components
+export const CardStyles = {
+  card: { 
+    maxWidth: '100%', minWidth: '80%',
+    margin: '.5em 1em .5em 1em', padding: '0 1em 0 1em', alignSelf: 'center',
+    background: '#F2F2F2',
+  },
+  collapse: {
+    minWidth: '100%',
+    background: '#DDDDDD',
+    borderRadius: '.25em',
+    marginBottom: '1em',
+  },
+  cardContentCard: { alignItems: 'flex-start', padding: 0, paddingBottom: '0 !important' },
+  cardContentCollapse: { padding: '2 !important' },
+  gridItem: { alignSelf: 'center' },
+  alert: { 
+    maxWidth: '100%', minWidth: '80%',
+    margin: '.5em 1em .5em 1em', padding: '0 1em 0 1em', alignSelf: 'center'  
+  }
+};
+
+/***********************************/
+/*** Buttons & Switch Components ***/
+/***********************************/
+
+/**
+ * Buttons that are used throughout the source in various contexts
+ * 
+ * @property fn: function that executes onClick for this button
+ * @property entity: in CreateButtonProps: the label to assign to the button in UI if needed
+ */
+export interface UserButtonProps { fn: () => unknown; }
+export interface CreateButtonProps extends UserButtonProps { entity: string; }
+
+export const CreateButton = (props: CreateButtonProps): JSX.Element => {
+  return (
+    <Tooltip title={'Add ' + props.entity}>
+      <Button onClick={props.fn} color='primary' variant='contained'>
+        <Typography variant='button'>Create {props.entity}</Typography>
+      </Button>
+    </Tooltip> 
+  );
+};
+
+export const CancelButton = (props: UserButtonProps): JSX.Element => { 
+  return ( <Button onClick={props.fn} variant='outlined'><Typography variant='button'>Cancel</Typography></Button> ); 
+};
+
+export const EditButton = (props: UserButtonProps): JSX.Element => {
+  return (
+    <Tooltip title='Edit'>
+      <IconButton color='primary' onClick={props.fn}>
+        <Edit />
+      </IconButton>
+    </Tooltip>
+  );
+};
+export const DeleteButton = (props: UserButtonProps): JSX.Element => {
+  return (
+    <Tooltip title='Delete'>
+      <IconButton color='primary' onClick={props.fn}>
+        <DeleteForever />
+      </IconButton>
+    </Tooltip>
+  );
+};
+
+export interface AlertDialogProps {
+  title: string; 
+  details: string | null; 
+  open: boolean;
+  onClose: () => void; 
+}
+export const AlertDialog = (props: AlertDialogProps): JSX.Element => {
+  return (
+    <Dialog open={props.open} onClose={props.onClose}>
+      <DialogTitle>{props.title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>{props.details || ''}</DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onClose} variant='outlined'><Typography variant='button'>Ok</Typography></Button>
+      </DialogActions>
+    </Dialog>
   );
 };

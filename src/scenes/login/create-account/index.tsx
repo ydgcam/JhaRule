@@ -40,7 +40,7 @@ const CreateAccountForm = (): JSX.Element => {
       .oneOf([Yup.ref('password')], 'Confirm Password does not match'),
   });
 
-  return (loggedIn ? <Navigate to={'/'}/> :
+  return (loggedIn ? <Navigate to={'/documents'}/> :
     <Container sx={{ bgcolor: 'container.light', padding: 5, borderRadius: 'calc(3px + 1vmin)' }}>
       <Formik
         initialValues={{
