@@ -9,7 +9,7 @@ import AppHeader from './components/AppHeader';
 import LandingPage from './scenes/landing/index';
 import CreatePage from './scenes/document/create/index';
 import EditPage from './scenes/document/edit/index';
-import DocumentList from './scenes/document/index';
+import DocumentList from './components/DocumentList';
 import ProfilePage from './scenes/profile/index';
 
 function App() {
@@ -17,7 +17,7 @@ function App() {
     <ThemeProvider theme={THEME}>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<LoginPage />} />
+          <Route path='/login' element={<LoginPage />} />
           <Route element={<AppHeader />}>
             <Route path='/documents' element={<LandingPage />}>
               <Route index element={<DocumentList />} />
