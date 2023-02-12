@@ -1,9 +1,17 @@
 /**
+ * AUTHOR CREDIT -- Jordan Seiler
+ * 
+ * A fellow Radford alumn and former colleague.
+ * 
+ */
+
+/**
  * Result<T, E> is a generic union type of two variants. A result
  * is either "Ok" (and of type T) or "Err" (and of type E).
  * 
  * Result is deliberately designed to make you check whether the value is
  * Ok or Err before you can use it.
+ * 
  */
 export type Result<T, E extends Error> = NonNullable<T> | E;
 

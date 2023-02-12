@@ -1,12 +1,18 @@
 /**
- * Type definition for a Job Hazard
- * contains unique identifiers for it's corresponding JobHazardDocument and respective Step it belongs to
- * as well as a description of the risk involved and the proper control techniques. 
+ * Datatype definition for a Job Hazard
+ * 
+ * A Hazard is a Job Hazard within a Step of a Job Hazard Analysis
+ * 
+ * stepId - the id of the step this hazard belongs to
+ * risk - the risk description of this hazard
+ * control - way to mitigate or prevent such risk 
  */
+
 export type Hazard = JobStepHazard; 
 export interface JobStepHazard {
   uid: string, 
-  stepId: string,
+  stepId: string, 
+  title: string,
   risk: string,
   control: string,
 };

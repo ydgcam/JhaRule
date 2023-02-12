@@ -7,12 +7,20 @@ import { Hazard } from './hazard'
  * descriptions about work involved in this step, 
  * as well as a list of Hazards for this step. 
  */
-export type Step = StepBase;
-export interface StepBase {
+export type Step = StepBase | StepForView | StepFromDb;
+
+interface StepBase {
   uid: string, 
   jhaId: string, 
   stepNum: number, 
   title: string, 
   description: string,
-  hazards: Hazard[],
 };
+
+export interface StepForView extends StepBase {
+  hazards: Hazard[],
+}
+
+export interface StepFromDb extends StepBase {
+  hazards: string,
+}

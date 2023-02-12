@@ -25,5 +25,4 @@ yarn-error.log*
 backend/db.sqlite3
 backend/jharule/__pycache__/admin.cpython-38.pyc
 backend/backend/__pycache__/wsgi.cpython-38.pyc
-backend/db.sqlite3
-*.sqlite3
+backend/db*

@@ -19,7 +19,9 @@ from rest_framework import routers
 from jharule import views
 
 router = routers.DefaultRouter()                   
-router.register(r'jhas', views.JhaView, 'JHA')  
+router.register(r'jha', views.JhaView)
+router.register(r'step', views.StepView)   
+router.register(r'hazard', views.HazardView) 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
