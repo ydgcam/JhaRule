@@ -6,7 +6,7 @@ from os.path import join
 #!! of these models are contained in /src/types
 
 class JobHazardDocument(models.Model):
-    uid = models.TextField(primary_key=True)
+    uid = models.UUIDField(primary_key=True)
     title = models.CharField(max_length=255)
     company = models.CharField(max_length=100)
     department = models.CharField(null=True, blank=True, max_length=40)
@@ -33,7 +33,7 @@ class Step(models.Model):
         return join('photos', 'doc_%s' % instance.jha_id, 
                     'step_%s' % instance.uid, filename)
 
-    uid = models.TextField(primary_key=True)
+    uid = models.UUIDField(primary_key=True)
     title = models.CharField(max_length=255)
     jha_id = models.ForeignKey('JobHazardDocument', on_delete=models.CASCADE)
     step_num = models.PositiveSmallIntegerField(blank=True, validators=[MaxValueValidator(100), MinValueValidator(1)])
@@ -48,7 +48,7 @@ class Step(models.Model):
 
 class Hazard(models.Model):
 
-    uid = models.TextField(primary_key=True)
+    uid = models.UUIDField(primary_key=True)
     step_id = models.ForeignKey('Step', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
     risk = models.TextField(max_length=500)

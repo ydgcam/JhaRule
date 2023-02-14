@@ -25,5 +25,6 @@ router.register(r'hazard', views.HazardView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(router.urls))             
+    path('', include(router.urls)),
+    path('<uuid:jha_id>/', views.getStepsForJha, name='getStepForJha'),
 ]
