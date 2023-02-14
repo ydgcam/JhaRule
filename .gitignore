@@ -2,7 +2,7 @@
 
 # dependencies
 .venv
-/api/frontend/node_modules
+/jha/frontend/node_modules
 /.pnp
 .pnp.js
 
