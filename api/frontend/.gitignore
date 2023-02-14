@@ -1,8 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-.venv
-/api/frontend/node_modules
+/node_modules
 /.pnp
 .pnp.js
 
@@ -22,6 +21,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-api/db.sqlite3
-api/jharule/__pycache__/admin.cpython-38.pyc
-api/backend/__pycache__/wsgi.cpython-38.pyc

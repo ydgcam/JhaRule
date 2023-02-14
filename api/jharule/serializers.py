@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import JobHazardDocuments, Steps, Hazards
+from .models import JobHazardDocument, Step, Hazard
 
 class JhaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = JobHazardDocuments
+        model = JobHazardDocument
         fields = (
             'uid', 'title', 'company', 'department', 'activity', 
             'author_first', 'author_last', 'supervisor_first', 'supervisor_last',
@@ -12,10 +12,10 @@ class JhaSerializer(serializers.ModelSerializer):
 
 class StepSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Steps
+        model = Step
         fields = ('uid', 'jha_id', 'title', 'step_num', 'description', 'photo')
 
 class HazardSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Hazards
+        model = Hazard
         fields = ('uid' ,'step_id', 'title', 'risk', 'control')

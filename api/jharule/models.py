@@ -6,22 +6,15 @@ from os.path import join
 #!! of these models are contained in /src/types
 
 class JobHazardDocument(models.Model):
-
-    def isValid(x: str, nums: bool): 
-        if not nums:
-            return x.isalpha()
-        else: 
-            return x.replace(' ', '').isalnum()
-
     uid = models.TextField(primary_key=True)
     title = models.CharField(max_length=255)
     company = models.CharField(max_length=100)
-    department = models.CharField(null=True, blank=True, max_length=40, validators=[isValid(True)])
-    activity = models.CharField(max_length=255, validators=[isValid(True)])
-    author_first = models.CharField(max_length=35, validators=[isValid(False)])
-    author_last = models.CharField(max_length=35, validators=[isValid(False)])
-    supervisor_first = models.CharField(blank=True, null=True, max_length=35, validators=[isValid(False)])
-    supervisor_last = models.CharField(blank=True, null=True, max_length=35, validators=[isValid(False)])
+    department = models.CharField(null=True, blank=True, max_length=40)
+    activity = models.CharField(max_length=255)
+    author_first = models.CharField(max_length=35)
+    author_last = models.CharField(max_length=35)
+    supervisor_first = models.CharField(blank=True, null=True, max_length=35)
+    supervisor_last = models.CharField(blank=True, null=True, max_length=35)
     date_reported = models.DateField()
     last_updated = models.DateField(blank=True, auto_now=True)
     required_training = models.JSONField(blank=True, null=True) # JSONField supports list types
