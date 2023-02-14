@@ -1,33 +1,22 @@
+import axios from "axios";
 import { HazardError } from "../types/errors";
 import { Hazard } from "../types/hazard";
 import { isOk, Result, toErr, toOk } from "../types/result";
 
-export async function toHazards(data: string[]): Promise<Result<Hazard[], HazardError>> {
+export async function getHazardsForStep(stepId: string): Promise<Result<Hazard[], HazardError>> {
   const ans: Hazard[] = [];
-  for (const hz of data) {
-    const res = await getHazard(hz);
-    if (isOk(res)) {
-      ans.push(toOk(res));
-    }
-    else {
-      return toErr(res);
-    }
-  }
-  return ans;
-}
-
-export async function getHazard(hazardId: string): Promise<Result<Hazard, HazardError>> {
   try {
-    const fet = await fetch(`http://localhost:8000/api/hazard/${hazardId}`);
-    const resJson = await fet.json(); 
-    const res = JSON.parse(resJson);
-    return toHazard(res);
+    const docs = await axios.get(`hazards/'${stepId}'`);
+    for (const doc of docs.data) {
+      ans.push(convertToHazard(doc));
+    }
+    return ans; 
   } catch(e) {
     return new HazardError('Error fetching hazard', 'document-not-found');
   }
 }
 
-export function toHazard(data: any): Hazard {
+export function convertToHazard(data: any): Hazard {
   return (
     {
       uid: data.uid, 

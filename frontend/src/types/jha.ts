@@ -7,7 +7,7 @@ import { Step } from "./step";
 
 export type JobHazardDocument = JobHazardDocumentData | JhaFront;
 
-interface JobHazardDocumentData {
+export interface JobHazardDocumentData {
   uid: string, 
   title: string, 
   company: string, 
