@@ -1,11 +1,14 @@
-import React from 'react';
-import { Typography, Card, CardContent, Grid, CardActions, Collapse, Stack } from '@mui/material';
-import { format } from 'date-fns';
+import { Card, CardContent, CardActions, Collapse, CardHeader } from '@mui/material';
 import { useState } from 'react';
 import { JobHazardDocument } from '../types/jha';
-import { ConfirmationDialog } from './ConfirmationDialog';
+import { ConfirmationDialog } from './Inputs';
 import { CardStyles, DeleteButton, EditButton, ExpandMoreComp, AlertDialog } from './Inputs';
 import { useNavigate } from 'react-router-dom';
+import { StringFunctions } from '../types/utils';
+import DocumentDataView from './DocumentDataView';
+import { Result, isOk } from '../types/result';
+import { JobHazardDocumentError } from '../types/errors';
+import StepList from './StepList';
 
 interface DocumentCardProps {
   key: string,
@@ -17,83 +20,46 @@ const DocumentCard = (props: DocumentCardProps): JSX.Element => {
 
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
-  const [openDeleteScheduleModal, setOpenDeleteScheduleModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const [alertDetails, setAlertDetails] = useState<string | null>(null);
+
+  //TODO
+  const handleEdit = () => {}
+  const handleDelete = () => { setOpenDeleteModal(true); }
+  const deleteDocument = async (doc: JobHazardDocument): Promise<Result<true, JobHazardDocumentError>> => { return true; }
 
   return (
     <>
       <Card sx={CardStyles.card}>
+        <CardHeader title={props.jha.title} subheader={StringFunctions.formatName(props.jha.author)}/>
         <CardContent sx={CardStyles.cardContentCard}>
-          <Grid container spacing={3}>
-            <Grid item xs={4} sx={CardStyles.gridItem}>
-              <Typography variant='h4'>{props.jha.title}</Typography>
-            </Grid>
-            <Grid item xs={2} sx={CardStyles.gridItem}>
-              <Typography variant='h6'>Author: {`${props.jha.authorFirst} ${props.jha.authorLast}`}</Typography>
-            </Grid>
-            <Grid item xs={2} sx={CardStyles.gridItem}>
-              <EditButton fn={() => { navigate(`/documents/${props.jha.uid}`); }}/>
-            </Grid>
-            <Grid item xs={2} sx={CardStyles.gridItem}>
-              <DeleteButton fn={() => setOpenDeleteScheduleModal(true)}/>
-            </Grid>
-            <Grid item xs={2} sx={CardStyles.gridItem}>
-              <CardActions>
-                <ExpandMoreComp
-                  expand={expanded}
-                  onClick={() => {setExpanded(!expanded);}}
-                  aria-expanded={expanded}
-                  aria-label='show more'
-                />
-              </CardActions>
-            </Grid>
-          </Grid>
+          <DocumentDataView values={props.jha}/>
+          <Collapse in={expanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
+            <StepList jha={props.jha}/>
+          </Collapse>
         </CardContent>
-        <Collapse in={expanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
-          <CardContent sx={CardStyles.cardContentCollapse}>
-            <Grid container>
-              <Grid item xs={6}>
-                <Stack spacing={2}>
-                  <>
-                    <Typography variant='h6'>Date Reported: </Typography>
-                    <Typography variant='caption'>
-                      {
-                        format(props.jha.dateReported, 'MM/dd/yyyy h:mm aa')
-                      }
-                    </Typography>
-                  </>
-                  <>
-                    <Typography variant='h6'>Last updated: </Typography>
-                    <Typography variant='caption'>
-                      {
-                        format(props.jha.lastUpdated, 'MM/dd/yyyy h:mm aa')
-                      }
-                    </Typography>
-                  </>
-                </Stack>
-              </Grid>
-              <Grid item xs={6}>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Collapse>
+        <CardActions>
+          <EditButton fn={handleEdit} text={'this job hazard analysis document'}/>
+          <DeleteButton fn={handleDelete} text={'this job hazard analysis document'}/>
+          <ExpandMoreComp expand={expanded} onClick={() => {setExpanded(!expanded);}} aria-expanded={expanded}/>
+        </CardActions>
       </Card>
       <ConfirmationDialog 
         title={'Delete Document'}
         text={'Are you sure you want to delete this document?'}
         isSubmitting={isSubmitting}
-        open={openDeleteScheduleModal}
-        closeFn={() => setOpenDeleteScheduleModal(false)}
+        open={openDeleteModal}
+        closeFn={() => setOpenDeleteModal(false)}
         action={() => { 
           setSubmitting(true);
-          /*deleteDocument(props.schedule).then((res) => {
+          deleteDocument(props.jha).then((res) => {
             setSubmitting(false);
             if (isOk(res)) {
               props.refreshCallbackFn(); 
             }
-            setOpenDeleteScheduleModal(false);
-          });*/
+            setOpenDeleteModal(false);
+          });
         }}/>
       <AlertDialog 
         title={'Error occured deleting document'} 

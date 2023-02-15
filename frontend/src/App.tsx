@@ -19,7 +19,7 @@ function App() {
         <Routes>
           <Route path='/login' element={<LoginPage />} />
           <Route element={<AppHeader />}>
-            <Route path='/documents' element={<LandingPage />}>
+            <Route path='/' element={<LandingPage />}>
               <Route index element={<DocumentList />} />
               <Route path='create' element={<CreatePage /> }/>
               <Route path=':docId' element={<EditPage />} />

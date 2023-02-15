@@ -7,9 +7,7 @@
  * risk - the risk description of this hazard
  * control - way to mitigate or prevent such risk 
  */
-
-export type Hazard = JobStepHazard; 
-export interface JobStepHazard {
+export type Hazard = {
   uid: string, 
   stepId: string, 
   title: string,

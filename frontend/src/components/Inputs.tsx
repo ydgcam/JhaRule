@@ -1,12 +1,25 @@
-/**************************/
-/** TextField Components **/
-/**************************/
+
 import { styled } from '@mui/material/styles';
 import { ExpandMore } from '@mui/icons-material';
-import { Tooltip, TextField, InputAdornment, MenuItem, Button, IconButton, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Tooltip, TextField, InputAdornment, MenuItem, Button, IconButton, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, CircularProgress } from "@mui/material";
 import { Lock, Email, DeleteForever, Edit } from '@mui/icons-material';
 import React from "react";
 
+/**************************/
+/** Wrapper Components **/
+/**************************/
+/**
+ * Small wrappers for reoccuring MUI component implementations in source 
+ */
+export const LoadingWheel = (props: {show: boolean}): JSX.Element => {
+  return (
+    <CircularProgress sx={{ visibility: props.show ? 'visible' : 'hidden' }} variant='indeterminate' color='primary'/>
+  );
+}
+
+/**************************/
+/** TextField Components **/
+/**************************/
 /**
  * Password/Email Input components
  * @property stateValue: the value in state that this textfield's input corresponds to
@@ -16,6 +29,7 @@ interface AuthTextFieldPropTypes {
   stateValue: string; 
   stateFunction: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
 export const PasswordTextField = (props: AuthTextFieldPropTypes): JSX.Element => {
   return (
     <Tooltip title='Enter your password.'>
@@ -30,6 +44,7 @@ export const PasswordTextField = (props: AuthTextFieldPropTypes): JSX.Element =>
     </Tooltip>
   );
 };
+
 export const EmailTextField = (props: AuthTextFieldPropTypes): JSX.Element => {
   return (
     <Tooltip title='Enter your email.'>
@@ -45,6 +60,7 @@ export const EmailTextField = (props: AuthTextFieldPropTypes): JSX.Element => {
     </Tooltip>
   );
 };
+
 /**
  * TextField Select compenent
  * 
@@ -94,7 +110,7 @@ export interface ExpandMoreCompProps {
 }
 export const ExpandMoreComp = styled((props: ExpandMoreCompProps): JSX.Element => {
   const { expand, ...other } = props;
-  return <ExpandMore {...other} />;
+  return <ExpandMore {...other} aria-label='show more' />;
 })(({ theme, expand }) => ({ //
   transform: !expand ? 
     'rotate(0deg)' : 'rotate(180deg)',
@@ -105,12 +121,8 @@ export const ExpandMoreComp = styled((props: ExpandMoreCompProps): JSX.Element =
 }));
 
 /**************************/
-/*** Card UI Components ***/
+/*** Card Styling ***/
 /**************************/
-
-/** NEEDS TO BE FURTHER ABSTRACTED */
-
-//Styling rules for Card components
 export const CardStyles = {
   card: { 
     maxWidth: '100%', minWidth: '80%',
@@ -133,35 +145,41 @@ export const CardStyles = {
 };
 
 /***********************************/
-/*** Buttons & Switch Components ***/
+/*** Button Components ***/
 /***********************************/
-
 /**
  * Buttons that are used throughout the source in various contexts
  * 
  * @property fn: function that executes onClick for this button
- * @property entity: in CreateButtonProps: the label to assign to the button in UI if needed
+ * @property text: describes the action peformed by the button 
  */
-export interface UserButtonProps { fn: () => unknown; }
-export interface CreateButtonProps extends UserButtonProps { entity: string; }
+export interface UserButtonProps { fn: () => unknown, text: string, isSubmitting?: boolean }
+export type CancelButtonProps = Omit<UserButtonProps, 'text'>;
 
-export const CreateButton = (props: CreateButtonProps): JSX.Element => {
+export const DoButton = (props: UserButtonProps): JSX.Element => {
   return (
-    <Tooltip title={'Add ' + props.entity}>
-      <Button onClick={props.fn} color='primary' variant='contained'>
-        <Typography variant='button'>Create {props.entity}</Typography>
-      </Button>
-    </Tooltip> 
+    <Button disabled={props.isSubmitting} onClick={props.fn} color='primary' variant='contained'>
+      <Typography variant='button'>{props.text}</Typography>
+    </Button>
   );
 };
-
-export const CancelButton = (props: UserButtonProps): JSX.Element => { 
-  return ( <Button onClick={props.fn} variant='outlined'><Typography variant='button'>Cancel</Typography></Button> ); 
+export const InfoButton = (props: UserButtonProps): JSX.Element => {
+  return (
+    <Button onClick={props.fn} variant='outlined' color='info'>
+      <Typography variant='button'>{props.text}</Typography>
+    </Button>
+  );
+}
+export const CancelButton = (props: CancelButtonProps): JSX.Element => { 
+  return ( 
+    <Button disabled={props.isSubmitting} color='primary' onClick={props.fn} variant='outlined'>
+      <Typography variant='button'>Cancel</Typography>
+    </Button>
+  ); 
 };
-
 export const EditButton = (props: UserButtonProps): JSX.Element => {
   return (
-    <Tooltip title='Edit'>
+    <Tooltip title={'Edit ' + props.text}>
       <IconButton color='primary' onClick={props.fn}>
         <Edit />
       </IconButton>
@@ -170,14 +188,25 @@ export const EditButton = (props: UserButtonProps): JSX.Element => {
 };
 export const DeleteButton = (props: UserButtonProps): JSX.Element => {
   return (
-    <Tooltip title='Delete'>
-      <IconButton color='primary' onClick={props.fn}>
+    <Tooltip title={'Delete ' + props.text}>
+      <IconButton color='error' onClick={props.fn}>
         <DeleteForever />
       </IconButton>
     </Tooltip>
   );
 };
 
+/***********************************/
+/*** Dialog Components ***/
+/***********************************/
+/**
+ * Dialogs or Modals that are used throughout the source in various contexts
+ * 
+ * @property title: Header text of the dialog box
+ * @property details: a description to be provided by this dialog 
+ * @property open: an external state value controlling this components visibility
+ * @property onClose: a function to execute immediately before this component dismounts
+ */
 export interface AlertDialogProps {
   title: string; 
   details: string | null; 
@@ -192,7 +221,34 @@ export const AlertDialog = (props: AlertDialogProps): JSX.Element => {
         <DialogContentText>{props.details || ''}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.onClose} variant='outlined'><Typography variant='button'>Ok</Typography></Button>
+        <InfoButton fn={props.onClose} text={'Ok'}/>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+export interface ConfirmationDialogProps {
+  title: string,
+  text: string,
+  open: boolean,
+  isSubmitting?: boolean, 
+  action: () => void,
+  closeFn: () => void;
+}
+
+export const ConfirmationDialog = (props: ConfirmationDialogProps): JSX.Element => {
+  return (
+    <Dialog open={props.open} onClose={props.closeFn}>
+      <DialogTitle>{props.title}</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {props.text}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <CancelButton fn={props.closeFn}/>
+        <DoButton fn={props.action} text='Confirm'/>
+        <CircularProgress sx={{ visibility: props.isSubmitting ? 'visible' : 'hidden' }} variant='indeterminate' color='primary'/>
       </DialogActions>
     </Dialog>
   );

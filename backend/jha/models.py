@@ -11,10 +11,8 @@ class JobHazardDocument(models.Model):
     company = models.CharField(max_length=100)
     department = models.CharField(null=True, blank=True, max_length=40)
     activity = models.CharField(max_length=255)
-    author_first = models.CharField(max_length=35)
-    author_last = models.CharField(max_length=35)
-    supervisor_first = models.CharField(blank=True, null=True, max_length=35)
-    supervisor_last = models.CharField(blank=True, null=True, max_length=35)
+    author = models.CharField(default='First Last', max_length=70)
+    supervisor = models.CharField(blank=True, null=True, max_length=70)
     date_reported = models.DateField()
     last_updated = models.DateField(blank=True, auto_now=True)
     required_training = models.JSONField(blank=True, null=True) # JSONField supports list types
@@ -22,9 +20,9 @@ class JobHazardDocument(models.Model):
     signatures = models.JSONField(blank=True, null=True)
 
     def __str__(self):
-        return self.title
-    def get_id(self):
         return self.uid
+    def get_title(self):
+        return self.title
 
 class Step(models.Model):
 
@@ -41,9 +39,9 @@ class Step(models.Model):
     photo = models.ImageField(blank=True, null=True, upload_to=get_photo_path)
 
     def __str__(self):
-        return self.title
-    def get_id(self):
         return self.uid
+    def get_title(self):
+        return self.title
 
 
 class Hazard(models.Model):
@@ -55,6 +53,6 @@ class Hazard(models.Model):
     control = models.TextField(max_length=500)
 
     def __str__(self):
-        return self.title
-    def get_id(self):
         return self.uid
+    def get_title(self):
+        return self.title

@@ -1,7 +1,6 @@
 import DocumentCard from './DocumentCard';
-import { toOk, isOk, Result, toErr } from '../types/result';
+import { toOk, isOk } from '../types/result';
 import { JobHazardDocument } from '../types/jha';
-import { JobHazardDocumentError } from '../types/errors';
 import { useEffect, useState } from 'react';
 import { fetchAllDocuments } from '../services/jha-service';
 
@@ -9,29 +8,14 @@ const DocumentList = (): JSX.Element => {
 
   const [allDocuments, setAllDocuments] = useState<JobHazardDocument[]>([]);
   
-  const getDocuments = async (): Promise<Result<JobHazardDocument[], JobHazardDocumentError>> => {
+  const getDocuments = async (): Promise<JobHazardDocument[]> => {
     const documents = await fetchAllDocuments();
-    if (isOk(documents)) {
-      return toOk(documents);
-    } else {
-      return toErr(documents);
-    }
+    return isOk(documents) ? toOk(documents) : [];
   };
 
-  const refreshDocumentList = (): void => {
-    getDocuments().then((docs) => {
-      if (isOk(docs)) {
-        setAllDocuments(toOk(docs));
-      }
-      else {
-        setAllDocuments([]);
-      }
-    });
-  };
-
-  useEffect(() => {
-    refreshDocumentList();
-  }, []);
+  const refreshDocumentList = () => { getDocuments().then((docs) => { setAllDocuments(docs) }); };
+  
+  useEffect(() => { refreshDocumentList(); }, []);
 
   return (
     <>

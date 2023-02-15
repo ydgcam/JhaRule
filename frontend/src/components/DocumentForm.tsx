@@ -2,8 +2,9 @@ import { Grid, TextField, Stack, Button, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { JobHazardDocument } from "../types/jha";
 import { Step } from "../types/step";
-import { CreateButton } from "./Inputs";
+import { DoButton } from "./Inputs";
 import StepForm from './StepForm';
+import { StringFunctions } from "../types/utils";
 
 export interface DocumentFormProps {
   document?: JobHazardDocument;
@@ -12,7 +13,7 @@ export interface DocumentFormProps {
 const DocumentForm = (props: DocumentFormProps) => {
 
   const [title, setTitle] = useState(props.document ? props.document.title : 'New Document Title');
-  const [author, setAuthor] = useState(props.document ? (props.document.authorFirst + ' ' + props.document.authorLast) : 'Authored By');
+  const [author, setAuthor] = useState(props.document ? StringFunctions.formatName(props.document.author) : 'Authored By');
   const [steps, setSteps] = useState<Step[]>([]);
 
   const createJHA = () => {};
@@ -31,7 +32,7 @@ const DocumentForm = (props: DocumentFormProps) => {
                 <Typography variant='h1'>Steps</Typography>
               </Grid>
               <Grid item xs={2}>
-                <CreateButton entity={'Next Step'} fn={createStep}/>
+                <DoButton text={'Next Step'} fn={createStep}/>
               </Grid>
             </Grid>
             {

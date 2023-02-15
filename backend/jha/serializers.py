@@ -5,8 +5,7 @@ class JhaSerializer(serializers.ModelSerializer):
     class Meta:
         model = JobHazardDocument
         fields = (
-            'uid', 'title', 'company', 'department', 'activity', 
-            'author_first', 'author_last', 'supervisor_first', 'supervisor_last',
+            'uid', 'title', 'company', 'department', 'activity', 'author', 'supervisor',
             'date_reported', 'last_updated', 'required_training', 'required_ppe', 'signatures'
         )
 

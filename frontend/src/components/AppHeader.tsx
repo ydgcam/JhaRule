@@ -45,11 +45,11 @@ const AppHeader = (): JSX.Element => {
               setOpen(false);
               navigate(link.to);
             }}>
-              <ListItemText sx={{ color: 'white', pl: 1 }} primary={link.text} />
+              <ListItemText sx={{ color: 'secondary.light', pl: 1 }} primary={link.text} />
             </ListItemButton>
           ))}
           <ListItemButton key={'Sign Out'} onClick={()=>{}}>
-            <ListItemText sx={{ color: 'white', pl: 1 }} primary={'Sign Out'} />
+            <ListItemText sx={{ color: 'secondary.light', pl: 1 }} primary={'Sign Out'} />
           </ListItemButton>
         </List>
       </Box>
@@ -70,7 +70,7 @@ const AppHeader = (): JSX.Element => {
           >
             <MenuIcon sx={{ fontSize: 40 }} />
           </IconButton>
-          <Typography variant="h3" noWrap component="div">
+          <Typography variant="h3" noWrap component="div" color={'secondary'}>
             JhaRule
           </Typography>
         </Toolbar>
