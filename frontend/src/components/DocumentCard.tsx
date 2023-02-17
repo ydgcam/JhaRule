@@ -6,9 +6,9 @@ import { CardStyles, DeleteButton, EditButton, ExpandMoreComp, AlertDialog } fro
 import { useNavigate } from 'react-router-dom';
 import { StringFunctions } from '../types/utils';
 import DocumentDataView from './DocumentDataView';
-import { Result, isOk } from '../types/result';
-import { JobHazardDocumentError } from '../types/errors';
+import { isOk } from '../types/result';
 import StepList from './StepList';
+import { deleteJobHazardDocument } from '../services/jha-service';
 
 interface DocumentCardProps {
   key: string,
@@ -20,19 +20,19 @@ const DocumentCard = (props: DocumentCardProps): JSX.Element => {
 
   const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const [alertDetails, setAlertDetails] = useState<string | null>(null);
 
   //TODO
-  const handleEdit = () => {}
+  const handleEdit = () => { setIsEdit(true); }
   const handleDelete = () => { setOpenDeleteModal(true); }
-  const deleteDocument = async (doc: JobHazardDocument): Promise<Result<true, JobHazardDocumentError>> => { return true; }
 
   return (
     <>
       <Card sx={CardStyles.card}>
-        <CardHeader title={props.jha.title} subheader={StringFunctions.formatName(props.jha.author)}/>
+        <CardHeader title={props.jha.title} subheader={'Author: ' + StringFunctions.formatName(props.jha.author)}/>
         <CardContent sx={CardStyles.cardContentCard}>
           <DocumentDataView values={props.jha}/>
           <Collapse in={expanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
@@ -53,7 +53,7 @@ const DocumentCard = (props: DocumentCardProps): JSX.Element => {
         closeFn={() => setOpenDeleteModal(false)}
         action={() => { 
           setSubmitting(true);
-          deleteDocument(props.jha).then((res) => {
+          deleteJobHazardDocument(props.jha.uid).then((res) => {
             setSubmitting(false);
             if (isOk(res)) {
               props.refreshCallbackFn(); 
@@ -61,7 +61,7 @@ const DocumentCard = (props: DocumentCardProps): JSX.Element => {
             setOpenDeleteModal(false);
           });
         }}/>
-      <AlertDialog 
+      <AlertDialog
         title={'Error occured deleting document'} 
         details={alertDetails || ''} 
         open={alertDetails !== null} 

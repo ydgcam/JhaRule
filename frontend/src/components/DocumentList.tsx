@@ -3,6 +3,8 @@ import { toOk, isOk } from '../types/result';
 import { JobHazardDocument } from '../types/jha';
 import { useEffect, useState } from 'react';
 import { fetchAllDocuments } from '../services/jha-service';
+import DocumentDataForm from './DocumentDataForm';
+import { Stack, Typography } from '@mui/material';
 
 const DocumentList = (): JSX.Element => {
 
@@ -19,6 +21,10 @@ const DocumentList = (): JSX.Element => {
 
   return (
     <>
+      <Stack margin={3} spacing={3}>
+        <Typography align='center' variant='h2'>Job Hazard Analysis Documents</Typography>
+        <DocumentDataForm refreshCallBackFn={refreshDocumentList}/>
+      </Stack>
       {
         allDocuments.map((doc, index) => {
           return (

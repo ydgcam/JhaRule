@@ -17,11 +17,11 @@ class HazardsView(viewsets.ModelViewSet):
 ## Dates and List types are not supported
 def queryJhasByCol(request, column_name, value):
     query = {column_name: value}
-    jha_list = list(JobHazardDocument.objects.all().filter(**query))
+    jha_list = list(JobHazardDocument.objects.all().filter(**query).values())
     return JsonResponse(jha_list, safe=False)
     
 def getStepsForJha(request, jha_id):
-    step_list = list(Step.objects.all().filter(jha_id=jha_id).order_by('step_num'))
+    step_list = list(Step.objects.all().filter(jha_id=jha_id).order_by('step_num').values())
     return JsonResponse(step_list, safe=False)
 
 def getHazardsForStep(request, step_id):

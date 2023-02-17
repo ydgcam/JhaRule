@@ -3,7 +3,7 @@ import { isErr, isOk, Result, toErr, toOk } from '../types/result';
 import { JobHazardDocumentError } from '../types/errors';
 import { fetchStepsForDocument } from './step-service';
 import axios from 'axios';
-import { parseJSON } from 'date-fns';
+import { parseISO, parseJSON } from 'date-fns';
 import { Step } from '../types/step';
 
 export async function createJobHazardDocument(jhaData: JobHazardDocumentData): Promise<Result<void, JobHazardDocumentError>> {
@@ -82,8 +82,8 @@ export function convertToJobHazardDocument(data: any, steps: Step[]): JobHazardD
     department: data.department || '',
     author: data.author, 
     supervisor: data.supervisor || '', 
-    lastUpdated: parseJSON(data.last_updated), 
-    dateReported: parseJSON(data.date_reported),
+    lastUpdated: parseISO(data.last_updated), 
+    dateReported: parseISO(data.date_reported),
     requiredTraining: data.required_training || [], 
     requiredPpe: data.required_ppe || [], 
     signatures: data.signatures || [],

@@ -13,10 +13,10 @@ export const DocumentDataView = (props: {values: JobHazardDocument}): JSX.Elemen
     <Stack>
       <Grid container id={'Dates'}>
         <Grid item id={'Date Reported'} xs={6}>
-          <Typography>{'Date Reported: ' + format(props.values.dateReported, 'MM/dd/yyyy')}</Typography>
+          <Typography>{'Date Reported: ' + format(props.values.dateReported, 'MM/dd/Y')}</Typography>
         </Grid>
         <Grid item id={'Last Updated'} xs={6}>
-          <Typography>{'Last Edit: ' + format(props.values.lastUpdated, 'mm/dd/yyyy h:m:s aa')}</Typography>
+          <Typography>{'Last Edit: ' + format(props.values.lastUpdated, 'MM/dd/Y h:mm:ss aa')}</Typography>
         </Grid>
       </Grid>
       <Grid container id={'Leadership'}>
@@ -24,7 +24,7 @@ export const DocumentDataView = (props: {values: JobHazardDocument}): JSX.Elemen
           <Typography>{'Company: ' + StringFunctions.toInitial(props.values.company)}</Typography>
         </Grid>
         <Grid item id={'Supervisor'} xs={6}>
-          <Typography>{'Supervisor: ' + StringFunctions.formatName(props.values.supervisor)}</Typography>
+          <Typography>{'Supervisor: ' + (StringFunctions.formatName(props.values.supervisor) || 'N/A')}</Typography>
         </Grid>
       </Grid>
       <Grid container id={'Job Details'}>
