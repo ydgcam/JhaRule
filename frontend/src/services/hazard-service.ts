@@ -6,7 +6,7 @@ import { Result } from "../types/result";
 export async function getHazardsForStep(stepId: string): Promise<Result<Hazard[], HazardError>> {
   const ans: Hazard[] = [];
   try {
-    const docs = await axios.get(`hazards/'${stepId}'`);
+    const docs = await axios.get(`step/${stepId}/hazards`);
     for (const doc of docs.data) {
       ans.push(convertToHazard(doc));
     }

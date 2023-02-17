@@ -13,7 +13,7 @@ export const DocumentDataView = (props: {values: JobHazardDocument}): JSX.Elemen
     <Stack>
       <Grid container id={'Dates'}>
         <Grid item id={'Date Reported'} xs={6}>
-          <Typography>{'Date Reported: ' + format(props.values.dateReported, 'mm/dd/yyyy')}</Typography>
+          <Typography>{'Date Reported: ' + format(props.values.dateReported, 'MM/dd/yyyy')}</Typography>
         </Grid>
         <Grid item id={'Last Updated'} xs={6}>
           <Typography>{'Last Edit: ' + format(props.values.lastUpdated, 'mm/dd/yyyy h:m:s aa')}</Typography>

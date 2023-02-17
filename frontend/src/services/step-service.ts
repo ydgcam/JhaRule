@@ -20,7 +20,7 @@ export function convertToStep(data: any, hazs: Hazard[]): Step {
 export async function fetchStepsForDocument(jha: string): Promise<Result<Step[], StepError>> {
   const ans: Step[] = [];
   try {
-    const docs = await axios.get(`steps/'${jha}'`);
+    const docs = await axios.get(`/jha/${jha}/steps`);
     for (const doc of docs.data) {
       const hazList = await getHazardsForStep(doc.uid);
       if (isErr(hazList)) {
