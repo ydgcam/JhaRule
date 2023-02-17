@@ -15,3 +15,11 @@ export type Step = {
   description: string,
   hazards: Hazard[]
 };
+
+export type StepData = {
+  uid: string, 
+  jha_id: string, 
+  step_num: number, 
+  title: string, 
+  description: string,
+};

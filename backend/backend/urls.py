@@ -19,13 +19,14 @@ from rest_framework import routers
 from jha import views
 
 router = routers.DefaultRouter()                   
-router.register(r'jha', views.JhaView)
-router.register(r'step', views.StepView)   
-router.register(r'hazard', views.HazardView) 
+router.register(r'jhas', views.JhasView)
+router.register(r'steps', views.StepsView)   
+router.register(r'hazards', views.HazardsView) 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),   
-    path('jha/<str:jha_id>/steps', views.getStepsForJha, name='getStepsForJha'),
-    path('step/<str:step_id>/hazards', views.getHazardsForStep, name='getHazardsForStep'),          
+    path('jhas/<str:jha_id>/steps', views.getStepsForJha, name='getStepsForJha'),
+    path('jhas/<str:column_name>/<str:value>', views.queryJhasByCol, name='queryJhasByCol'),
+    path('steps/<str:step_id>/hazards', views.getHazardsForStep, name='getHazardsForStep'),          
 ]

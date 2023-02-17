@@ -3,7 +3,8 @@ export type ErrorCode =
   'email-in-use' |
   'bad-foreign-reference' |
   'document-not-found' |
-  'uniqueness-constraint-violated';
+  'uniqueness-constraint-violated' | 
+  'error-posting-to-db';
 
   export class CodedError extends Error {
     code: ErrorCode;

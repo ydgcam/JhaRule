@@ -14,3 +14,11 @@ export type Hazard = {
   risk: string,
   control: string,
 };
+
+export type HazardData = {
+  uid: string, 
+  step_id: string, 
+  title: string,
+  risk: string,
+  control: string,
+}
