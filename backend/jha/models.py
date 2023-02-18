@@ -14,7 +14,7 @@ class JobHazardDocument(models.Model):
     author = models.CharField(default='First Last', max_length=70)
     supervisor = models.CharField(blank=True, null=True, max_length=70)
     date_reported = models.DateField()
-    last_updated = models.DateField(blank=True, auto_now=True)
+    last_updated = models.DateTimeField(blank=True, auto_now=True)
     required_training = models.JSONField(blank=True, null=True) # JSONField supports list types
     required_ppe = models.JSONField(blank=True, null=True)
     signatures = models.JSONField(blank=True, null=True)

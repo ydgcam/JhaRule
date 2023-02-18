@@ -1,32 +1,28 @@
 import { Card, CardContent, CardActions, Collapse, CardHeader } from '@mui/material';
 import { useState } from 'react';
-import { JobHazardDocument } from '../types/jha';
+import { JhaData } from '../types/jha';
 import { ConfirmationDialog } from './Inputs';
-import { CardStyles, DeleteButton, EditButton, ExpandMoreComp, AlertDialog } from './Inputs';
-import { useNavigate } from 'react-router-dom';
+import { CardStyles, DeleteButton, ExpandMoreComp, AlertDialog } from './Inputs';
 import { StringFunctions } from '../types/utils';
 import DocumentDataView from './DocumentDataView';
 import { isOk } from '../types/result';
 import StepList from './StepList';
-import { deleteJobHazardDocument } from '../services/jha-service';
+import { deleteJha } from '../services/jha-service';
+import DocumentForm from './DocumentForm';
 
 interface DocumentCardProps {
   key: string,
-  jha: JobHazardDocument,
+  jha: JhaData,
   refreshCallbackFn: () => void;
 }
 
 const DocumentCard = (props: DocumentCardProps): JSX.Element => {
 
-  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false);
-  const [isEdit, setIsEdit] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const [alertDetails, setAlertDetails] = useState<string | null>(null);
-
-  //TODO
-  const handleEdit = () => { setIsEdit(true); }
+  
   const handleDelete = () => { setOpenDeleteModal(true); }
 
   return (
@@ -40,20 +36,20 @@ const DocumentCard = (props: DocumentCardProps): JSX.Element => {
           </Collapse>
         </CardContent>
         <CardActions>
-          <EditButton fn={handleEdit} text={'this job hazard analysis document'}/>
+          <DocumentForm jha={props.jha} refreshCallBackFn={props.refreshCallbackFn}/>
           <DeleteButton fn={handleDelete} text={'this job hazard analysis document'}/>
           <ExpandMoreComp expand={expanded} onClick={() => {setExpanded(!expanded);}} aria-expanded={expanded}/>
         </CardActions>
       </Card>
       <ConfirmationDialog 
-        title={'Delete Document'}
-        text={'Are you sure you want to delete this document?'}
+        title={'Delete Job Hazard Analysis'}
+        text={'Are you sure you want to delete this Job Hazard Analysis?'}
         isSubmitting={isSubmitting}
         open={openDeleteModal}
         closeFn={() => setOpenDeleteModal(false)}
         action={() => { 
           setSubmitting(true);
-          deleteJobHazardDocument(props.jha.uid).then((res) => {
+          deleteJha(props.jha.uid).then((res) => {
             setSubmitting(false);
             if (isOk(res)) {
               props.refreshCallbackFn(); 

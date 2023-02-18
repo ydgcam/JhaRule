@@ -1,22 +1,22 @@
 import { Stack, Grid, Typography } from "@mui/material";
 import { format } from "date-fns";
-import { JobHazardDocument } from "../types/jha";
+import { JhaData } from "../types/jha";
 import { StringFunctions } from "../types/utils";
 
 /**
- * Renders the JobHazardDocumentData within the DocumentCard
- * @property values: the JobHazardDocument object instance to display
+ * Renders the JhaDataData within the DocumentCard
+ * @property values: the JhaData object instance to display
  */
-export interface DocumentDataViewProps {values: JobHazardDocument};
-export const DocumentDataView = (props: {values: JobHazardDocument}): JSX.Element => {
+export interface DocumentDataViewProps {values: JhaData};
+export const DocumentDataView = (props: {values: JhaData}): JSX.Element => {
   return (
     <Stack>
       <Grid container id={'Dates'}>
         <Grid item id={'Date Reported'} xs={6}>
-          <Typography>{'Date Reported: ' + format(props.values.dateReported, 'MM/dd/Y')}</Typography>
+          <Typography>{'Date Reported: ' + format(props.values.date_reported, 'MM/dd/Y')}</Typography>
         </Grid>
         <Grid item id={'Last Updated'} xs={6}>
-          <Typography>{'Last Edit: ' + format(props.values.lastUpdated, 'MM/dd/Y h:mm:ss aa')}</Typography>
+          <Typography>{'Last Edit: ' + format(props.values.last_updated, 'MM/dd/Y h:mm:ss aa')}</Typography>
         </Grid>
       </Grid>
       <Grid container id={'Leadership'}>
@@ -37,10 +37,10 @@ export const DocumentDataView = (props: {values: JobHazardDocument}): JSX.Elemen
       </Grid>
       <Grid container id={'Training/Protection'}>
         <Grid item id={'Training'} xs={6}>
-          <Typography>{'Required Training: ' + (props.values.requiredTraining.toString() || 'None Listed')}</Typography>
+          <Typography>{'Required Training: ' + (props.values.required_training.toString() || 'None Listed')}</Typography>
         </Grid>
         <Grid item id={'Protection'} xs={6}>
-          <Typography>{'Protection Equipment: ' + (props.values.requiredPpe.toString() || 'None Listed')}</Typography>
+          <Typography>{'Protection Equipment: ' + (props.values.required_ppe.toString() || 'None Listed')}</Typography>
         </Grid>
       </Grid>
       <Grid container id={'Signatures'}>

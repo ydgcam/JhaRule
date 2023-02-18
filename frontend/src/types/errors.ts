@@ -20,7 +20,7 @@ export type ErrorCode =
     new (message: string, code: ErrorCode) : T;
   }
 
-  export class JobHazardDocumentError extends CodedError {
+  export class JobHazardAnalysisError extends CodedError {
     constructor(message: string, code: ErrorCode) {
       super(message, code);
       this.name = 'JobHazardDocumentError';

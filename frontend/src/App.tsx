@@ -1,9 +1,8 @@
-import React from 'react';
 import { Routes, Route, BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import THEME from './components/Theme';
-import AdapterDateFns from '@mui/lab/AdapterDateFns'
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import LoginPage from './scenes/login/index';
 import AppHeader from './components/AppHeader';
 import LandingPage from './scenes/landing/index';
@@ -15,19 +14,21 @@ import ProfilePage from './scenes/profile/index';
 function App() {
   return (
     <ThemeProvider theme={THEME}>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/login' element={<LoginPage />} />
-          <Route element={<AppHeader />}>
-            <Route path='/' element={<LandingPage />}>
-              <Route index element={<DocumentList />} />
-              <Route path='create' element={<CreatePage /> }/>
-              <Route path=':docId' element={<EditPage />} />
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/login' element={<LoginPage />} />
+            <Route element={<AppHeader />}>
+              <Route path='/' element={<LandingPage />}>
+                <Route index element={<DocumentList />} />
+                <Route path='create' element={<CreatePage /> }/>
+                <Route path=':docId' element={<EditPage />} />
+              </Route>
+              <Route path='/profile' element={<ProfilePage />} />
             </Route>
-            <Route path='/profile' element={<ProfilePage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }

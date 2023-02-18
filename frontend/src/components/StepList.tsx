@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { Step } from "../types/step";
 import { fetchStepsForDocument } from "../services/step-service";
-import { JobHazardDocument } from "../types/jha";
+import { JhaData } from "../types/jha";
 import StepDataView from "./StepDataView";
 import { isOk, toOk } from "../types/result";
 
-export interface StepListProps { jha: JobHazardDocument }
+export interface StepListProps { jha: JhaData }
 export const StepList = (props: StepListProps): JSX.Element => {
 
   const [allSteps, setAllSteps] = useState<Step[]>([]);

@@ -1,16 +1,16 @@
 import DocumentCard from './DocumentCard';
 import { toOk, isOk } from '../types/result';
-import { JobHazardDocument } from '../types/jha';
+import { JhaData } from '../types/jha';
 import { useEffect, useState } from 'react';
 import { fetchAllDocuments } from '../services/jha-service';
-import DocumentDataForm from './DocumentDataForm';
+import DocumentForm from './DocumentForm';
 import { Stack, Typography } from '@mui/material';
 
 const DocumentList = (): JSX.Element => {
 
-  const [allDocuments, setAllDocuments] = useState<JobHazardDocument[]>([]);
+  const [allDocuments, setAllDocuments] = useState<JhaData[]>([]);
   
-  const getDocuments = async (): Promise<JobHazardDocument[]> => {
+  const getDocuments = async (): Promise<JhaData[]> => {
     const documents = await fetchAllDocuments();
     return isOk(documents) ? toOk(documents) : [];
   };
@@ -23,7 +23,7 @@ const DocumentList = (): JSX.Element => {
     <>
       <Stack margin={3} spacing={3}>
         <Typography align='center' variant='h2'>Job Hazard Analysis Documents</Typography>
-        <DocumentDataForm refreshCallBackFn={refreshDocumentList}/>
+        <DocumentForm refreshCallBackFn={refreshDocumentList}/>
       </Stack>
       {
         allDocuments.map((doc, index) => {

@@ -1,37 +1,41 @@
-import { parseJSON, format } from "date-fns";
 import { Step } from "./step"; 
 
 /**
- * Type definition for a Job Hazard Analysis document
- * Contains general metadata as well as a list of Step objects.
+ * Type definition for a Job Hazard Analysis Document
  */
+export type JobHazardAnalysis = JhaData | JhaJSON;
+export type NewJhaData = Omit<JhaData, 'uid' | 'steps' | 'last_updated'>;
 
-export type JHA = JobHazardDocument | JobHazardDocumentData;
-
-interface JobHazardDocumentBase {
+interface JhaBase {
   uid: string, 
   title: string, 
   company: string, 
   activity: string, 
-  department: string | null,
   author: string, 
+  signatures: string | string[] | null,
+  department: string | null,
   supervisor: string | null,
-  signatures: string[] | null,
+  required_training: string | string[] | null,
+  required_ppe: string | string[] | null,
+  date_reported: Date | string,
 };
 
-export interface JobHazardDocument extends JobHazardDocumentBase {
+//All possible data within a JobHazardDocument instance
+export interface JhaData extends JhaBase {
   department: string,
   supervisor: string,
-  lastUpdated: Date, 
-  dateReported: Date,
-  requiredTraining: string[], 
-  requiredPpe: string[], 
+  date_reported: Date,
+  last_updated: Date,
+  required_training: string[], 
+  required_ppe: string[],
   signatures: string[],
   steps: Step[]
 };
 
-export interface JobHazardDocumentData extends JobHazardDocumentBase {
-  date_reported: Date,
-  required_training: string[] | null, 
-  required_ppe: string[] | null
+//Data that can be sent to backend
+export interface JhaJSON extends JhaBase {
+  date_reported: string,
+  required_training: string | null, 
+  required_ppe: string | null, 
+  signatures: string | null, 
 };
