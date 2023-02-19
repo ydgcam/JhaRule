@@ -7,7 +7,7 @@ export const StepDataView = (props: StepDataViewProps): JSX.Element => {
     <Stack>
       <Grid container id={'Title'}>
         <Grid item xs={12}>
-          <Typography>{props.step.stepNum + '. ' + props.step.title}</Typography>
+          <Typography>{props.step.step_num + '. ' + props.step.title}</Typography>
         </Grid>
       </Grid>
     </Stack>

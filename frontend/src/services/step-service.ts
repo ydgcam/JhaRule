@@ -1,70 +1,79 @@
-import { Step, StepData } from '../types/step';
+import { NewStepData, StepBE, StepFE } from '../types/step';
 import { StepError } from "../types/errors";
-import { isErr, Result, toErr, toOk } from "../types/result";
-import { getHazardsForStep } from './hazard-service';
+import { isErr, Result, toOk } from "../types/result";
+import { readHazardsForStep } from './hazard-service';
 import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 import { Hazard } from '../types/hazard';
 
-export async function createStep(stepData: StepData): Promise<Result<void, StepError>> {
+export const createStep = async (data: NewStepData, callback?: () => unknown): Promise<Result<void, StepError>> => {
+  const postData = newToStepDb(data);
+  axios({ method: 'post', url:'steps/', data: {...postData}})
+  .then(() => { if (callback) { callback(); } })
+  .catch((e) => { return new StepError(e, 'post-request-error-step')});
+}
+
+export async function readStepsForJha(jha_id: string): Promise<Result<StepFE[], StepError>> {
+  const ans: StepFE[] = [];
   try {
-    await axios.post(`/steps/`, stepData);
-  } catch(e) {
-    return new StepError('createStep', 'error-posting-to-db');
-  }
-}
-
-export async function deleteStep(id: string): Promise<Result<void, StepError>> {
-  try {
-    await axios.delete(`/steps/${id}`);
-  } catch(e) {
-    return new StepError('deleteStep', 'error-posting-to-db');
-  }
-}
-
-export async function updateStep(stepData: StepData): Promise<Result<void, StepError>> {
-  try {
-    await axios.put(`/steps/${stepData.uid}`, stepData);
-  } catch(e) {
-    return new StepError('updateStep', 'error-posting-to-db');
-  }
-}
-
-export function convertToStep(data: any, hazs: Hazard[]): Step {
-  const converted = {
-    uid: data.uid, 
-    jhaId: data.jha_id, 
-    stepNum: data.step_num, 
-    title: data.title, 
-    description: data.description,  
-    hazards: hazs,
-  }
-  return converted;
-}
-
-export function convertToStepData(data: any, hazs: Hazard[]): StepData {
-  const converted = {
-    uid: data.uid, 
-    jha_id: data.jhaId, 
-    step_num: data.stepNum, 
-    title: data.title, 
-    description: data.description,  
-  }
-  return converted;
-}
-
-export async function fetchStepsForDocument(jha: string): Promise<Result<Step[], StepError>> {
-  const ans: Step[] = [];
-  try {
-    const docs = await axios.get(`/jhas/${jha}/steps`);
+    const docs = await axios.get(`jhas/${jha_id}/steps`);
     for (const doc of docs.data) {
-      const hazList = await getHazardsForStep(doc.uid);
-      if (isErr(hazList)) {
-        return toErr(hazList);
-      }
-      ans.push(convertToStep(doc, toOk(hazList)));
+      const hazList = await readHazardsForStep(doc.uid);
+      if (isErr(hazList))
+        return new StepError('fetchStepsForJha', 'get-request-error-hazard');
+      ans.push(toStep(doc, toOk(hazList)));
     }
     return ans;
   } catch(e) {
-    return new StepError('Error fetching steps', 'document-not-found');
+    return new StepError(`fetchStepsFor: ${jha_id}`, 'get-request-error-step');
   }
+}
+
+export const updateStep = async (data: StepFE, callback?: () => unknown): Promise<Result<void, StepError>> => {
+  const putData = toStepDb(data);
+  axios({ method: 'post', url:`steps/${data.uid}/`, data: {...putData}})
+  .then(() => { if (callback) { callback(); } })
+  .catch((e) => { return new StepError(e, 'put-request-error-step')});
+}
+
+export const deleteJha = async (id: string, callback?: () => unknown): Promise<Result<void, StepError>> => { 
+  axios.delete(`/steps/${id}/`)
+  .then(() => { if (callback) { callback(); } })
+  .catch((e) => { return new StepError(e, 'delete-request-error-step'); })
+}
+
+export function toStepDb(data: StepFE): StepBE {
+  const img = data.photo instanceof File ? data.photo : null;
+  return {
+    uid: data.uid, 
+    jha_id: data.jha_id, 
+    step_num: data.step_num, 
+    title: data.title, 
+    description: data.description || null,  
+    photo: img
+  };
+}
+
+export function newToStepDb(data: NewStepData): StepBE {
+  const img = data.photo instanceof File ? data.photo : null;
+  return {
+    uid: uuidv4(), 
+    jha_id: data.jha_id, 
+    step_num: data.step_num, 
+    title: data.title, 
+    description: data.description || null,  
+    photo: img
+  };
+}
+
+function toStep(data: any, hazs: Hazard[]): StepFE {
+  return {
+    uid: data.uid, 
+    jha_id: data.jha_id, 
+    step_num: data.step_num, 
+    title: data.title, 
+    description: data.description,  
+    hazards: hazs,
+    photo: data.photo
+  };
 }

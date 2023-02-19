@@ -3,8 +3,8 @@ import { Step } from "./step";
 /**
  * Type definition for a Job Hazard Analysis Document
  */
-export type JobHazardAnalysis = JhaData | JhaJSON;
-export type NewJhaData = Omit<JhaData, 'uid' | 'steps' | 'last_updated'>;
+export type JobHazardAnalysis = JhaFE | JhaBE;
+export type NewJhaData = Omit<JhaFE, 'uid' | 'steps' | 'last_updated'>;
 
 interface JhaBase {
   uid: string, 
@@ -21,7 +21,7 @@ interface JhaBase {
 };
 
 //All possible data within a JobHazardDocument instance
-export interface JhaData extends JhaBase {
+export interface JhaFE extends JhaBase {
   department: string,
   supervisor: string,
   date_reported: Date,
@@ -33,7 +33,7 @@ export interface JhaData extends JhaBase {
 };
 
 //Data that can be sent to backend
-export interface JhaJSON extends JhaBase {
+export interface JhaBE extends JhaBase {
   date_reported: string,
   required_training: string | null, 
   required_ppe: string | null, 

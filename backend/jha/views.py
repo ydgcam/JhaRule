@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render
 from .serializers import JhaSerializer, StepSerializer, HazardSerializer 
 from rest_framework import viewsets      
@@ -13,6 +14,10 @@ class StepsView(viewsets.ModelViewSet):
 class HazardsView(viewsets.ModelViewSet):  
     serializer_class = HazardSerializer   
     queryset = Hazard.objects.all() 
+
+def allJhaUids(request): 
+    uids = list(JobHazardDocument.objects.values_list('uid', flat=True))
+    return JsonResponse(uids, safe=False)
 
 ## Dates and List types are not supported
 def queryJhasByCol(request, column_name, value):

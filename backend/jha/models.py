@@ -26,16 +26,16 @@ class JobHazardDocument(models.Model):
 
 class Step(models.Model):
 
-    #Used to determine where to store an uploaded photo in database
-    def get_photo_path(instance, filename):
-        return join('photos', 'doc_%s' % instance.jha_id, 
-                    'step_%s' % instance.uid, filename)
-
     uid = models.TextField(primary_key=True)
     title = models.CharField(max_length=255)
     jha_id = models.ForeignKey('JobHazardDocument', on_delete=models.CASCADE)
-    step_num = models.PositiveSmallIntegerField(blank=True, validators=[MaxValueValidator(100), MinValueValidator(1)])
-    description = models.TextField(blank=True, null=True, max_length=500)
+    step_num = models.PositiveSmallIntegerField(validators=[MaxValueValidator(25), MinValueValidator(1)])
+    description = models.TextField(blank=True, null=True)
+
+    #Used to determine where to store an uploaded photo in database
+    def get_photo_path(instance, filename):
+        return join('%s' % instance.jha_id, '%s' % instance.uid, filename)
+
     photo = models.ImageField(blank=True, null=True, upload_to=get_photo_path)
 
     def __str__(self):

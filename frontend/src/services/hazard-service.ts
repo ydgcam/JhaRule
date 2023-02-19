@@ -1,52 +1,47 @@
 import axios from "axios";
 import { HazardError } from "../types/errors";
-import { Hazard } from "../types/hazard";
+import { Hazard, NewHazardData } from "../types/hazard";
 import { Result } from "../types/result";
+import { v4 as uuidv4 } from 'uuid';
 
-export async function createHazard(hazardData: Hazard): Promise<Result<void, HazardError>> {
-  try {
-    await axios.post(`/hazards/`, hazardData);
-  } catch(e) {
-    return new HazardError('createHazard', 'error-posting-to-db');
-  }
+export const createHazard = async (newHaz: NewHazardData, callBack?: () => unknown): Promise<Result<void, HazardError>> => {
+  const postData = convert(newHaz);
+  axios({ method: 'post', url:'hazards/', data: {...postData}})
+  .then(() => { if (callBack) { callBack(); } })
+  .catch((e) => { return new HazardError(e, 'post-request-error-hazard')});
 }
 
-export async function deleteHazard(id: string): Promise<Result<void, HazardError>> {
-  try {
-    await axios.delete(`/hazards/${id}`);
-  } catch(e) {
-    return new HazardError('deleteHazard', 'error-posting-to-db');
-  }
-}
-
-export async function updateHazard(hazardData: Hazard): Promise<Result<void, HazardError>> {
-  try {
-    await axios.put(`/hazards/${hazardData.uid}`, hazardData);
-  } catch(e) {
-    return new HazardError('updateHazard', 'error-posting-to-db');
-  }
-}
-
-export async function getHazardsForStep(stepId: string): Promise<Result<Hazard[], HazardError>> {
+export async function readHazardsForStep(step_id: string): Promise<Result<Hazard[], HazardError>> {
   const ans: Hazard[] = [];
   try {
-    const docs = await axios.get(`steps/${stepId}/hazards`);
+    const docs = await axios.get(`steps/${step_id}/hazards`);
     for (const doc of docs.data) {
-      ans.push(convertToHazard(doc));
+      ans.push(convert(doc));
     }
     return ans; 
   } catch(e) {
-    return new HazardError('Error fetching hazard', 'document-not-found');
+    return new HazardError('readHazardsForStep', 'get-request-error-hazard');
   }
 }
 
-export function convertToHazard(data: any): Hazard {
-  const converted: Hazard = {
-    uid: data.uid, 
-    stepId: data.step_id, 
+export const updateHazard = async (haz: Hazard, callBack?: () => unknown): Promise<Result<void, HazardError>> => {
+  axios({ method: 'put', url:`hazards/${haz.uid}/`, data: {...haz}})
+  .then(() => { if (callBack) { callBack(); } })
+  .catch((e) => { return new HazardError(e, 'put-request-error-hazard')});
+}
+
+export const deleteHazard = async (id: string, callback?: () => unknown): Promise<Result<void, HazardError>> => { 
+  axios.delete(`hazards/${id}/`)
+  .then(() => { if (callback) { callback(); }})
+  .catch((e) => { return new HazardError(e, 'delete-request-error-hazard') });
+}
+
+function convert(data: NewHazardData): Hazard {
+  return {
+    uid: uuidv4(), 
+    step_id: data.step_id, 
     title: data.title,
     risk: data.risk,
     control: data.control
   };
-  return converted;
 }

@@ -6,10 +6,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import LoginPage from './scenes/login/index';
 import AppHeader from './components/AppHeader';
 import LandingPage from './scenes/landing/index';
-import CreatePage from './scenes/document/create/index';
-import EditPage from './scenes/document/edit/index';
 import DocumentList from './components/DocumentList';
 import ProfilePage from './scenes/profile/index';
+
+//TODO: Implement authentication hook for routing
 
 function App() {
   return (
@@ -21,10 +21,8 @@ function App() {
             <Route element={<AppHeader />}>
               <Route path='/' element={<LandingPage />}>
                 <Route index element={<DocumentList />} />
-                <Route path='create' element={<CreatePage /> }/>
-                <Route path=':docId' element={<EditPage />} />
+                <Route path='/profile' element={<ProfilePage />} />
               </Route>
-              <Route path='/profile' element={<ProfilePage />} />
             </Route>
           </Routes>
         </BrowserRouter>

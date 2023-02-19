@@ -1,6 +1,6 @@
 import { Grid, TextField, Stack, Button, Typography, Autocomplete, Chip, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
-import { JhaData } from "../types/jha";
+import { JhaFE } from "../types/jha";
 import { DoButton, EditButton } from "./Inputs";
 import { StringFunctions } from "../types/utils";
 import * as Yup from 'yup';
@@ -33,7 +33,7 @@ const FormValidator = Yup.object().shape({
 }); 
 
 interface DocumentDataEditProps {
-  jha?: JhaData;   
+  jha?: JhaFE;   
   refreshCallBackFn: () => void;
 }
 
@@ -44,23 +44,10 @@ const DocumentForm = (props: DocumentDataEditProps): JSX.Element => {
   const [date, setDate] = useState<Dayjs | null>(dayjs(props.jha ? props.jha.date_reported : new Date()));
 
   const toggleDialog = () => setModalOpen(!modalOpen);
+
   const submit = (formInfo: any) => { return props.jha ? edit(formInfo) : create(formInfo); };
-  const create = (data: any) => { 
-    return createJha(data).then((res) => { 
-      console.log(res);
-      props.refreshCallBackFn(); 
-    }).catch((e) => { 
-      console.log(e); 
-    });
-  }; 
-  const edit = (data: any) => { 
-    return updateJha(data).then((res) => { 
-      console.log(res);
-      props.refreshCallBackFn(); 
-    }).catch((e) => { 
-      console.log(e); 
-    });
-  }; 
+  const create = (data: any) => { return createJha(data, props.refreshCallBackFn); }; 
+  const edit = (data: any) => { return updateJha(data, props.refreshCallBackFn); }; 
   
   const jhaValues = props.jha ? 
   {

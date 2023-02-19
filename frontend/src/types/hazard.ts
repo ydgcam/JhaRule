@@ -9,16 +9,10 @@
  */
 export type Hazard = {
   uid: string, 
-  stepId: string, 
-  title: string,
-  risk: string,
-  control: string,
-};
-
-export type HazardData = {
-  uid: string, 
   step_id: string, 
   title: string,
   risk: string,
   control: string,
 }
+
+export type NewHazardData = Omit<Hazard, 'uid'>

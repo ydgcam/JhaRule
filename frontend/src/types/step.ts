@@ -1,25 +1,23 @@
 import { Hazard } from './hazard'
-/**
- * Type definition for a Step
- * 
- * contains unique identifieres, 
- * sequential order relative to the job it pertains to,
- * descriptions about work involved in this step, 
- * as well as a list of Hazards for this step. 
- */
-export type Step = {
-  uid: string, 
-  jhaId: string, 
-  stepNum: number, 
-  title: string, 
-  description: string,
-  hazards: Hazard[]
-};
+import { IntRange } from './utils';
 
-export type StepData = {
-  uid: string, 
-  jha_id: string, 
-  step_num: number, 
+/**
+ * @see utils.IntRange
+ */
+type StepNum = IntRange<1, 26>; 
+
+export type Step = StepBE | StepFE; 
+export interface StepBE extends StepBase { step_num: number, photo: File | null }
+export interface StepFE extends StepBase { step_num: StepNum, hazards: Hazard[] };
+
+export type NewStepData = Omit<StepFE, 'hazards' | 'uid'>;
+
+//Extended and applied by child interfaces
+interface StepBase {
+  uid: string, //PK
+  jha_id: string, //FK
+  step_num: StepNum | number,
   title: string, 
-  description: string,
+  description: string | null,
+  photo: HTMLImageElement | File | string | null
 };

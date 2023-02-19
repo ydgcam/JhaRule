@@ -1,6 +1,6 @@
 import { Card, CardContent, CardActions, Collapse, CardHeader } from '@mui/material';
 import { useState } from 'react';
-import { JhaData } from '../types/jha';
+import { JhaFE } from '../types/jha';
 import { ConfirmationDialog } from './Inputs';
 import { CardStyles, DeleteButton, ExpandMoreComp, AlertDialog } from './Inputs';
 import { StringFunctions } from '../types/utils';
@@ -12,7 +12,7 @@ import DocumentForm from './DocumentForm';
 
 interface DocumentCardProps {
   key: string,
-  jha: JhaData,
+  jha: JhaFE,
   refreshCallbackFn: () => void;
 }
 

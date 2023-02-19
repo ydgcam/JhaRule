@@ -1,17 +1,17 @@
 import DocumentCard from './DocumentCard';
 import { toOk, isOk } from '../types/result';
-import { JhaData } from '../types/jha';
+import { JhaFE } from '../types/jha';
 import { useEffect, useState } from 'react';
-import { fetchAllDocuments } from '../services/jha-service';
+import { readAll } from '../services/jha-service';
 import DocumentForm from './DocumentForm';
 import { Stack, Typography } from '@mui/material';
 
 const DocumentList = (): JSX.Element => {
 
-  const [allDocuments, setAllDocuments] = useState<JhaData[]>([]);
+  const [allDocuments, setAllDocuments] = useState<JhaFE[]>([]);
   
-  const getDocuments = async (): Promise<JhaData[]> => {
-    const documents = await fetchAllDocuments();
+  const getDocuments = async (): Promise<JhaFE[]> => {
+    const documents = await readAll();
     return isOk(documents) ? toOk(documents) : [];
   };
 

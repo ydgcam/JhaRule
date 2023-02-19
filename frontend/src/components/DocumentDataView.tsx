@@ -1,14 +1,14 @@
 import { Stack, Grid, Typography } from "@mui/material";
 import { format } from "date-fns";
-import { JhaData } from "../types/jha";
+import { JhaFE } from "../types/jha";
 import { StringFunctions } from "../types/utils";
 
 /**
- * Renders the JhaDataData within the DocumentCard
- * @property values: the JhaData object instance to display
+ * Renders the JhaFEData within the DocumentCard
+ * @property values: the JhaFE object instance to display
  */
-export interface DocumentDataViewProps {values: JhaData};
-export const DocumentDataView = (props: {values: JhaData}): JSX.Element => {
+export interface DocumentDataViewProps {values: JhaFE};
+export const DocumentDataView = (props: {values: JhaFE}): JSX.Element => {
   return (
     <Stack>
       <Grid container id={'Dates'}>
@@ -21,7 +21,7 @@ export const DocumentDataView = (props: {values: JhaData}): JSX.Element => {
       </Grid>
       <Grid container id={'Leadership'}>
         <Grid item id={'Company'} xs={6}>
-          <Typography>{'Company: ' + StringFunctions.toInitial(props.values.company)}</Typography>
+          <Typography>{'Company: ' + props.values.company}</Typography>
         </Grid>
         <Grid item id={'Supervisor'} xs={6}>
           <Typography>{'Supervisor: ' + (StringFunctions.formatName(props.values.supervisor) || 'N/A')}</Typography>
@@ -29,10 +29,10 @@ export const DocumentDataView = (props: {values: JhaData}): JSX.Element => {
       </Grid>
       <Grid container id={'Job Details'}>
         <Grid item id={'Department'} xs={6}>
-          <Typography>{'Department: ' + StringFunctions.toInitial(props.values.department)}</Typography>
+          <Typography>{'Department: ' + props.values.department}</Typography>
         </Grid>
         <Grid item id={'Activity'} xs={6}>
-          <Typography>{'Activity: ' + StringFunctions.toInitial(props.values.activity) }</Typography>
+          <Typography>{'Activity: ' + props.values.activity}</Typography>
         </Grid>
       </Grid>
       <Grid container id={'Training/Protection'}>
