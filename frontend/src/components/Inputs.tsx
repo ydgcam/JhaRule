@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import { Lock, Email, DeleteForever, Edit } from "@mui/icons-material";
 import React from "react";
+import THEME from './Theme';
 
 /**************************/
 /** Wrapper Components **/
@@ -175,25 +176,21 @@ export const CardStyles = {
   card: {
     maxWidth: "100%",
     minWidth: "80%",
-    margin: ".5em 1em .5em 1em",
-    padding: "0 1em 0 1em",
     alignSelf: "center",
-    background: "container.light",
+    background: THEME.palette.primary.light,
   },
   collapse: {
     minWidth: "100%",
-    background: "container.main",
+    background:THEME.palette.secondary.main,
     borderRadius: ".25em",
     marginBottom: "1em",
   },
   cardContentCard: {
     alignItems: "flex-start",
-    padding: 0,
-    paddingBottom: "0 !important",
-    background: 'secondary.light'
+    background: THEME.palette.secondary.main
   },
-  cardContentCollapse: { padding: "2 !important", background: 'secondary.main' },
-  gridItem: { alignSelf: "center", background: 'secondary.main' },
+  cardContentCollapse: { padding: "2 !important", background: THEME.palette.secondary.main },
+  gridItem: { alignSelf: "center", background: THEME.palette.secondary.main },
   alert: {
     maxWidth: "100%",
     minWidth: "80%",

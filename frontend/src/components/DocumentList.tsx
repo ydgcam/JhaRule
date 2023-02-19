@@ -21,7 +21,7 @@ const DocumentList = (): JSX.Element => {
 
   return (
     <>
-      <Stack margin={3} spacing={3}>
+      <Stack padding={3} spacing={3} sx={{ bgcolor: 'container.light'}}>
         <Typography align='center' variant='h2'>Job Hazard Analysis Documents</Typography>
         <DocumentForm refreshCallBackFn={refreshDocumentList}/>
       </Stack>

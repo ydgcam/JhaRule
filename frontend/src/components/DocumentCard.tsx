@@ -1,7 +1,7 @@
-import { Card, CardContent, CardActions, Collapse, CardHeader } from '@mui/material';
+import { Card, CardContent, CardActions, Collapse, CardHeader, Grid } from '@mui/material';
 import { useState } from 'react';
 import { JhaFE } from '../types/jha';
-import { ConfirmationDialog } from './Inputs';
+import { ConfirmationDialog, DoButton } from './Inputs';
 import { CardStyles, DeleteButton, ExpandMoreComp, AlertDialog } from './Inputs';
 import { StringFunctions } from '../types/utils';
 import DocumentDataView from './DocumentDataView';
@@ -9,6 +9,7 @@ import { isOk } from '../types/result';
 import StepList from './StepList';
 import { deleteJha } from '../services/jha-service';
 import DocumentForm from './DocumentForm';
+import { BorderAllRounded } from '@mui/icons-material';
 
 interface DocumentCardProps {
   key: string,
@@ -31,15 +32,19 @@ const DocumentCard = (props: DocumentCardProps): JSX.Element => {
         <CardHeader title={props.jha.title} subheader={'Author: ' + StringFunctions.formatName(props.jha.author)}/>
         <CardContent sx={CardStyles.cardContentCard}>
           <DocumentDataView values={props.jha}/>
-          <Collapse in={expanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
-            <StepList jha={props.jha}/>
-          </Collapse>
         </CardContent>
         <CardActions>
           <DocumentForm jha={props.jha} refreshCallBackFn={props.refreshCallbackFn}/>
           <DeleteButton fn={handleDelete} text={'this job hazard analysis document'}/>
-          <ExpandMoreComp expand={expanded} onClick={() => {setExpanded(!expanded);}} aria-expanded={expanded}/>
+          <DoButton text='Show Steps' fn={() => setExpanded(!expanded)}/>
         </CardActions>
+        <Collapse in={expanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
+          <CardContent sx={CardStyles.cardContentCollapse}>
+            <Grid container>
+              <StepList jha={props.jha}/>
+            </Grid>
+          </CardContent>
+        </Collapse>
       </Card>
       <ConfirmationDialog 
         title={'Delete Job Hazard Analysis'}

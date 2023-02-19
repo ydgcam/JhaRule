@@ -36,7 +36,7 @@ export const updateStep = async (data: StepFE, callback?: () => unknown): Promis
   .catch((e) => { return new StepError(e, 'put-request-error-step')});
 }
 
-export const deleteJha = async (id: string, callback?: () => unknown): Promise<Result<void, StepError>> => { 
+export const deleteStep = async (id: string, callback?: () => unknown): Promise<Result<void, StepError>> => { 
   axios.delete(`/steps/${id}/`)
   .then(() => { if (callback) { callback(); } })
   .catch((e) => { return new StepError(e, 'delete-request-error-step'); })

@@ -35,7 +35,7 @@ const Theme = createTheme({
       dark: '#999999',
     },
     contrastThreshold: 3,
-    tonalOffset: 0.3,
+    tonalOffset: .3
   },
 });
 

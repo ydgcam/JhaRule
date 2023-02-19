@@ -19,5 +19,5 @@ interface StepBase {
   step_num: StepNum | number,
   title: string, 
   description: string | null,
-  photo: HTMLImageElement | File | string | null
+  photo: File | string | null
 };

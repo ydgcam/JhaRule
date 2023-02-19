@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { Step } from "../types/step";
+import { StepFE } from "../types/step";
 import { readStepsForJha } from "../services/step-service";
 import { JhaFE } from "../types/jha";
-import StepDataView from "./StepDataView";
+import StepCard from "./StepCard";
 import { isOk, toOk } from "../types/result";
 
 export interface StepListProps { jha: JhaFE }
 export const StepList = (props: StepListProps): JSX.Element => {
 
-  const [allSteps, setAllSteps] = useState<Step[]>([]);
+  const [allSteps, setAllSteps] = useState<StepFE[]>([]);
   
-  const getSteps = async (): Promise<Step[]> => {
+  const getSteps = async (): Promise<StepFE[]> => {
     const documents = await readStepsForJha(props.jha.uid);
     return isOk(documents) ? toOk(documents) : [];
   };
@@ -24,7 +24,7 @@ export const StepList = (props: StepListProps): JSX.Element => {
       {
         allSteps.map((step, index) => {
           return (
-            <StepDataView
+            <StepCard
               key={index.toString()}
               step={step}
               refreshCallbackFn={refreshStepList}
