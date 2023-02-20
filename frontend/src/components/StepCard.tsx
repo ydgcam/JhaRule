@@ -1,55 +1,71 @@
-import { Card, CardActions, CardContent, CardHeader, Collapse, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, CardHeader, Collapse, ImageList, ImageListItem, Typography } from "@mui/material";
 import { StepFE } from "../types/step";
 import { deleteStep } from "../services/step-service";
 import { isOk } from "../types/result";
-import { CardStyles, DeleteButton, DoButton, ConfirmationDialog, AlertDialog } from "./Inputs";
+import { CardStyles, DeleteButton, DoButton, ConfirmationDialog, AlertDialog, ExpandMoreComp } from "./Inputs";
 import { useState } from "react";
 import StepForm from "./StepForm";
-import HazardForm from "./HazardForm";
+import HazardList from "./HazardList";
 
 export interface StepCardProps { step: StepFE, refreshCallbackFn: () => void }
 
 export const StepCard = (props: StepCardProps): JSX.Element => {
 
-  const [expanded, setExpanded] = useState(false);
+  const [dataExpanded, setdataExpanded] = useState(false);
+  const [hazardsExpanded, setHazardsExpanded] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [isSubmitting, setSubmitting] = useState(false);
   const [alertDetails, setAlertDetails] = useState<string | null>(null);
   
   const handleDelete = () => { setOpenDeleteModal(true); }
 
+  const renderImage = (): JSX.Element => {
+    return (
+        <ImageList sx={{ width: 500, height: 450 }} cols={1} rowHeight={164}> 
+        { 
+          props.step.photo ? 
+          <ImageListItem key={props.step.photo?.toString()}>
+            <img 
+              src={`${props.step.photo}?w=164&h=164&fit=crop&auto=format`}
+              srcSet={`${props.step.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+              alt={props.step.title}
+              loading="lazy"
+            />
+          </ImageListItem>
+          :
+          <></>
+        }
+      </ImageList>
+    );
+  }
+
   return (
     <>
-    <Card sx={CardStyles.card}>
-        <CardHeader title={props.step.step_num + '. ' + props.step.title}/>
-        <CardContent sx={CardStyles.cardContentCard}>
-          <Typography>{'Description: ' + props.step.description}</Typography>
-          {props.step.photo ? <img alt={props.step.description || props.step.title} src={props.step.photo.toString()}></img> : <></>}
-        </CardContent>
+      <Card sx={CardStyles.card}>
+        <CardHeader title={props.step.step_num + '. ' + props.step.title}
+          action={<ExpandMoreComp expand={dataExpanded} onClick={() => setdataExpanded(!dataExpanded)}/>}
+        />
+        <Collapse in={dataExpanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
+          <CardContent sx={CardStyles.cardContentCard}>
+            {renderImage()}
+            <Typography>{'Description: ' + props.step.description}</Typography>
+          </CardContent>
+        </Collapse>
         <CardActions>
           <StepForm step={props.step} refreshCallbackFn={props.refreshCallbackFn}/>
-          <DeleteButton fn={handleDelete} text={'this job hazard analysis document'}/>
-          <DoButton text='Add Hazards' fn={() => setExpanded(!expanded)}/>
+          <DeleteButton fn={handleDelete} text={'this step'}/>
+          <DoButton text='Show Hazards' fn={() => setHazardsExpanded(!hazardsExpanded)}/>
         </CardActions>
-        <Collapse in={expanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
+        <Collapse in={hazardsExpanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
           <CardContent sx={CardStyles.cardContentCollapse}>
-            {
-              props.step.hazards.map((haz, index) => {
-                return (
-                  <HazardForm
-                    key={index}
-                    hazard={haz}
-                    refreshCallbackFn={() => {}}
-                  />
-                )
-              })
-            }
+            <HazardList step={props.step} fn={props.refreshCallbackFn}/>
           </CardContent>
         </Collapse>
       </Card>
+
       <ConfirmationDialog 
         title={'Delete ' + props.step.title}
-        text={'Are you sure you want to delete this Step?'}
+        text={'Are you sure you want to delete this step?'}
         isSubmitting={isSubmitting}
         open={openDeleteModal}
         closeFn={() => setOpenDeleteModal(false)}

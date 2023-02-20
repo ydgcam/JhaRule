@@ -4,6 +4,7 @@ import { readStepsForJha } from "../services/step-service";
 import { JhaFE } from "../types/jha";
 import StepCard from "./StepCard";
 import { isOk, toOk } from "../types/result";
+import { Stack, Typography } from "@mui/material";
 
 export interface StepListProps { jha: JhaFE }
 export const StepList = (props: StepListProps): JSX.Element => {
@@ -21,6 +22,9 @@ export const StepList = (props: StepListProps): JSX.Element => {
 
   return (
     <>
+      <Stack padding={3} spacing={3} sx={{ bgcolor: 'container.light'}}>
+        <Typography align='center' variant='h2'>{props.jha.activity + ' steps'}</Typography>
+      </Stack>
       {
         allSteps.map((step, index) => {
           return (

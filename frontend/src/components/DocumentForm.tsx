@@ -32,22 +32,21 @@ const FormValidator = Yup.object().shape({
     .required('a date recorded is required'),
 }); 
 
-interface DocumentDataEditProps {
+interface DocumentFormProps {
   jha?: JhaFE;   
-  refreshCallBackFn: () => void;
+  refreshCallbackFn: () => void;
 }
 
-const DocumentForm = (props: DocumentDataEditProps): JSX.Element => {
+const DocumentForm = (props: DocumentFormProps): JSX.Element => {
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [submitErr, setSubmitErr] = useState('');
   const [date, setDate] = useState<Dayjs | null>(dayjs(props.jha ? props.jha.date_reported : new Date()));
 
   const toggleDialog = () => setModalOpen(!modalOpen);
 
   const submit = (formInfo: any) => { return props.jha ? edit(formInfo) : create(formInfo); };
-  const create = (data: any) => { return createJha(data, props.refreshCallBackFn); }; 
-  const edit = (data: any) => { return updateJha(data, props.refreshCallBackFn); }; 
+  const create = (data: any) => { return createJha(data, props.refreshCallbackFn); }; 
+  const edit = (data: any) => { return updateJha(data, props.refreshCallbackFn); }; 
   
   const jhaValues = props.jha ? 
   {
@@ -83,7 +82,6 @@ const DocumentForm = (props: DocumentDataEditProps): JSX.Element => {
       <DoButton text='Create New Document' fn={toggleDialog} />;
   };
 
-  const renderErrorMessage = (): JSX.Element => { return <Typography color='error'>{submitErr}</Typography>; };
   const renderTitle = (): string => { return (props.jha ? 'Edit ' : 'Create ') + 'Job Hazard Analysis'; };
 
   return (
@@ -97,7 +95,6 @@ const DocumentForm = (props: DocumentDataEditProps): JSX.Element => {
             initialValues={jhaValues}
             validationSchema={FormValidator}
             onSubmit={(values, { setSubmitting }) => {
-              setSubmitErr('');
               setSubmitting(true);
               submit(values).then((res) => { setSubmitting(false); setModalOpen(false); })
             }}
@@ -179,9 +176,6 @@ const DocumentForm = (props: DocumentDataEditProps): JSX.Element => {
                           ))
                         }
                       />
-                    </Grid>
-                    <Grid item container justifyContent='center' xs={12}>
-                      {renderErrorMessage()}
                     </Grid>
                   </Grid>
                 </DialogContent>

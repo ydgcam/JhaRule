@@ -26,10 +26,10 @@ const DocumentList = (): JSX.Element => {
         <DocumentForm refreshCallBackFn={refreshDocumentList}/>
       </Stack>
       {
-        allDocuments.map((doc, index) => {
+        allDocuments.map((doc) => {
           return (
             <DocumentCard
-              key={index.toString()}
+              key={doc.uid}
               jha={doc}
               refreshCallbackFn={refreshDocumentList}
             />

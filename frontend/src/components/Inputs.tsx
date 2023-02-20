@@ -216,7 +216,7 @@ export interface UserButtonProps {
 }
 export type CancelButtonProps = Omit<UserButtonProps, "text">;
 
-export const uploadButton = (props: UserButtonProps): JSX.Element => {
+export const UploadButton = (props: UserButtonProps): JSX.Element => {
   return (
     <IconButton color="primary" aria-label="upload picture" component="label">
       <input hidden accept="image/*" type="file" />
