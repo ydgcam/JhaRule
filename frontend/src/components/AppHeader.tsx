@@ -22,8 +22,8 @@ const AppHeader = (): JSX.Element => {
 
   const getSidebarLinkInfo = (): {to: string, text: string}[] => {
     return ([
+      {to: '/', text: 'Home'},
       {to: '/profile', text: 'Profile'}, 
-      {to: '/documents', text: 'Documents'}
     ]); 
   };
 
@@ -45,11 +45,11 @@ const AppHeader = (): JSX.Element => {
               setOpen(false);
               navigate(link.to);
             }}>
-              <ListItemText sx={{ color: 'secondary.light', pl: 1 }} primary={link.text} />
+              <ListItemText sx={{ color: 'primary.dark', pl: 1 }} primary={link.text} />
             </ListItemButton>
           ))}
           <ListItemButton key={'Sign Out'} onClick={()=>{}}>
-            <ListItemText sx={{ color: 'secondary.light', pl: 1 }} primary={'Sign Out'} />
+            <ListItemText sx={{ color: 'primary.dark', pl: 1 }} primary={'Sign Out'} />
           </ListItemButton>
         </List>
       </Box>
@@ -70,16 +70,14 @@ const AppHeader = (): JSX.Element => {
           >
             <MenuIcon sx={{ fontSize: 40 }} />
           </IconButton>
-          <Typography variant="h3" noWrap component="div" color={'secondary'}>
-            JhaRule
-          </Typography>
+          <Typography variant="h3" noWrap component="div" color={'secondary.main'}>JhaRuler</Typography>
         </Toolbar>
       </AppBar>
 
       <Drawer
         sx={{
           '& .MuiDrawer-paper': {
-            backgroundColor: THEME.palette.container.main
+            backgroundColor: THEME.palette.secondary.main
           },
         }}
         anchor="left"

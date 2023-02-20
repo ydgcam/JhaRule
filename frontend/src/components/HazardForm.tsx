@@ -3,11 +3,9 @@ import { Hazard } from '../types/hazard';
 import * as Yup from 'yup';
 import { createHazard, updateHazard } from '../services/hazard-service';
 import { StepFE } from '../types/step';
-import { v4 as uuidv4 } from 'uuid'; 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Stack, TextField, Typography } from '@mui/material';
 import { EditButton, DoButton, CancelButton, LoadingWheel } from './Inputs';
-import { Formik } from 'formik';
-import { Form } from 'react-router-dom';
+import { Formik, Form} from 'formik';
 
 const FormValidator = Yup.object().shape({
   title: Yup.string()
@@ -43,7 +41,7 @@ const HazardForm = (props: HazardFormProps) => {
   } 
   : 
   { 
-    uid: uuidv4(), step_id: props.step.uid, title: '', risk: '', control: '' 
+    step_id: props.step.uid, title: '', risk: '', control: '' 
   };
   
   const renderButton = (): JSX.Element => {
@@ -57,7 +55,7 @@ const HazardForm = (props: HazardFormProps) => {
   return (
     <>
       {renderButton()}
-      <Dialog open={modalOpen} onClose={toggleDialog} maxWidth='md' fullWidth>
+      <Dialog open={modalOpen} onClose={toggleDialog} maxWidth='sm' fullWidth>
         <DialogTitle>
           {<div><Typography variant='h4' align='center'>{renderTitle()}</Typography></div>}
         </DialogTitle>
@@ -83,19 +81,19 @@ const HazardForm = (props: HazardFormProps) => {
               <DialogContent>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <TextField required name="title" label="Title" variant="filled" color="primary"
+                    <TextField fullWidth required name="title" label="Title" variant="filled" color="primary"
                       value={values.title} onChange={handleChange} onBlur={handleBlur}
                       helperText={(errors.title && touched.title) && errors.title} FormHelperTextProps={{ error: true }} 
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField multiline required name="risk" label="Risk" variant="filled" color="primary"
+                    <TextField fullWidth multiline required name="risk" label="Risk" variant="filled" color="primary"
                       value={values.risk} onChange={handleChange} onBlur={handleBlur}
                       helperText={(errors.risk && touched.risk) && errors.risk} FormHelperTextProps={{ error: true }} 
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <TextField multiline required name="control" label="Control" variant="filled" color="primary"
+                    <TextField fullWidth multiline required name="control" label="Control" variant="filled" color="primary"
                       value={values.control} onChange={handleChange} onBlur={handleBlur}
                       helperText={(errors.control && touched.control) && errors.control} FormHelperTextProps={{ error: true }} 
                     />

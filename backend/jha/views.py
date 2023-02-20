@@ -3,7 +3,9 @@ from django.shortcuts import render
 from .serializers import JhaSerializer, StepSerializer, HazardSerializer 
 from rest_framework import viewsets      
 from .models import JobHazardDocument, Step, Hazard         
-from django.http import JsonResponse        
+from django.http import JsonResponse    
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+
 
 class JhasView(viewsets.ModelViewSet):  
     serializer_class = JhaSerializer 
@@ -11,6 +13,7 @@ class JhasView(viewsets.ModelViewSet):
 class StepsView(viewsets.ModelViewSet):  
     serializer_class = StepSerializer   
     queryset = Step.objects.all() 
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
 class HazardsView(viewsets.ModelViewSet):  
     serializer_class = HazardSerializer   
     queryset = Hazard.objects.all() 

@@ -1,4 +1,4 @@
-import { Card, CardActions, CardContent, CardHeader, Collapse, ImageList, ImageListItem, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, CardHeader, Collapse, Grid, ImageList, ImageListItem, Typography } from "@mui/material";
 import { StepFE } from "../types/step";
 import { deleteStep } from "../services/step-service";
 import { isOk } from "../types/result";
@@ -6,8 +6,9 @@ import { CardStyles, DeleteButton, DoButton, ConfirmationDialog, AlertDialog, Ex
 import { useState } from "react";
 import StepForm from "./StepForm";
 import HazardList from "./HazardList";
+import { JhaFE } from "../types/jha";
 
-export interface StepCardProps { step: StepFE, refreshCallbackFn: () => void }
+export interface StepCardProps { jha: JhaFE, step: StepFE, refreshCallbackFn: () => void }
 
 export const StepCard = (props: StepCardProps): JSX.Element => {
 
@@ -21,13 +22,12 @@ export const StepCard = (props: StepCardProps): JSX.Element => {
 
   const renderImage = (): JSX.Element => {
     return (
-        <ImageList sx={{ width: 500, height: 450 }} cols={1} rowHeight={164}> 
+        <ImageList sx={{ width: '100%', height: 164, border: '1px solid black' }} cols={1} rowHeight={164}> 
         { 
           props.step.photo ? 
           <ImageListItem key={props.step.photo?.toString()}>
             <img 
-              src={`${props.step.photo}?w=164&h=164&fit=crop&auto=format`}
-              srcSet={`${props.step.photo}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+              src={`media/${props.step.photo}`}
               alt={props.step.title}
               loading="lazy"
             />
@@ -47,14 +47,26 @@ export const StepCard = (props: StepCardProps): JSX.Element => {
         />
         <Collapse in={dataExpanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
           <CardContent sx={CardStyles.cardContentCard}>
-            {renderImage()}
-            <Typography>{'Description: ' + props.step.description}</Typography>
+            <Grid container>
+              {
+                props.step.photo ? 
+                <>
+                  <Grid item xs={4}> {renderImage()} </Grid>
+                  <Grid item xs={2}/>
+                </>
+                : <></>
+              }
+              <Grid item xs={6}>
+                <Typography sx={{textDecoration: 'underline'}}>{'Description: '}</Typography>
+                <Typography>{props.step.description}</Typography>
+              </Grid>
+            </Grid>
           </CardContent>
         </Collapse>
         <CardActions>
-          <StepForm step={props.step} refreshCallbackFn={props.refreshCallbackFn}/>
+          <StepForm jha={props.jha} step={props.step} refreshCallbackFn={props.refreshCallbackFn}/>
           <DeleteButton fn={handleDelete} text={'this step'}/>
-          <DoButton text='Show Hazards' fn={() => setHazardsExpanded(!hazardsExpanded)}/>
+          <DoButton text={hazardsExpanded ? 'Hide Hazards' : 'Show Hazards'} fn={() => setHazardsExpanded(!hazardsExpanded)}/>
         </CardActions>
         <Collapse in={hazardsExpanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
           <CardContent sx={CardStyles.cardContentCollapse}>

@@ -15,6 +15,13 @@ const HazardCard = (props: HazardCardProps): JSX.Element => {
   const [alertDetails, setAlertDetails] = useState<string | null>(null);
   
   const handleDelete = () => { setOpenDeleteModal(true); }
+  const doDelete = () => { 
+    setSubmitting(true);
+    deleteHazard(props.hazard.uid, props.refreshCallbackFn).then((res) => {
+      setSubmitting(false);
+      setOpenDeleteModal(false);
+    });
+  }
 
   return (
     <>
@@ -48,16 +55,7 @@ const HazardCard = (props: HazardCardProps): JSX.Element => {
         isSubmitting={isSubmitting}
         open={openDeleteModal}
         closeFn={() => setOpenDeleteModal(false)}
-        action={() => { 
-          setSubmitting(true);
-          deleteHazard(props.step.uid).then((res) => {
-            setSubmitting(false);
-            if (isOk(res)) {
-              props.refreshCallbackFn(); 
-            }
-            setOpenDeleteModal(false);
-          });
-        }}/>
+        action={doDelete}/>
       <AlertDialog
         title={'Error occured deleting hazard'} 
         details={alertDetails || ''} 

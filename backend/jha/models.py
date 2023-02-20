@@ -36,7 +36,7 @@ class Step(models.Model):
     def get_photo_path(instance, filename):
         return join('%s' % instance.jha_id, '%s' % instance.uid, filename)
 
-    photo = models.ImageField(blank=True, null=True, upload_to=get_photo_path)
+    photo = models.ImageField(blank=True, upload_to=get_photo_path)
 
     def __str__(self):
         return self.uid

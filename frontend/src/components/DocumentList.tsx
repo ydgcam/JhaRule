@@ -21,9 +21,9 @@ const DocumentList = (): JSX.Element => {
 
   return (
     <>
-      <Stack padding={3} spacing={3} sx={{ bgcolor: 'container.light'}}>
-        <Typography align='center' variant='h2'>Job Hazard Analysis Documents</Typography>
-        <DocumentForm refreshCallBackFn={refreshDocumentList}/>
+      <Stack padding={3} spacing={3} sx={{ bgcolor: 'secondary.main'}}>
+        <Typography align='center' variant='h3'>Job Hazard Analysis Documents</Typography>
+        <DocumentForm refreshCallbackFn={refreshDocumentList}/>
       </Stack>
       {
         allDocuments.map((doc) => {

@@ -48,13 +48,13 @@ const DocumentCard = (props: DocumentCardProps): JSX.Element => {
           </CardContent>
         </Collapse>
         <CardActions>
-          <DoButton text='Show Steps' fn={() => setStepsExpanded(!stepsExpanded)}/>
-          <DocumentForm jha={props.jha} refreshCallBackFn={props.refreshCallbackFn}/>
+          <DoButton text={stepsExpanded ? 'Hide Steps' : 'Show Steps'} fn={() => setStepsExpanded(!stepsExpanded)}/>
+          <DocumentForm jha={props.jha} refreshCallbackFn={props.refreshCallbackFn}/>
           <DeleteButton fn={handleDelete} text={'this job hazard analysis document'}/>
         </CardActions>
         <Collapse in={stepsExpanded} timeout='auto' unmountOnExit sx={CardStyles.collapse}>
           <CardContent sx={CardStyles.cardContentCollapse}>
-            <StepList jha={props.jha}/>
+            <StepList jha={props.jha} refreshCallbackFn={props.refreshCallbackFn}/>
           </CardContent>
         </Collapse>
       </Card>

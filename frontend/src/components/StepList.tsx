@@ -4,9 +4,11 @@ import { readStepsForJha } from "../services/step-service";
 import { JhaFE } from "../types/jha";
 import StepCard from "./StepCard";
 import { isOk, toOk } from "../types/result";
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import StepForm from "./StepForm";
+import { CardStyles } from "./Inputs";
 
-export interface StepListProps { jha: JhaFE }
+export interface StepListProps { jha: JhaFE, refreshCallbackFn: () => unknown }
 export const StepList = (props: StepListProps): JSX.Element => {
 
   const [allSteps, setAllSteps] = useState<StepFE[]>([]);
@@ -21,22 +23,24 @@ export const StepList = (props: StepListProps): JSX.Element => {
   useEffect(() => { refreshStepList(); }, []);
 
   return (
-    <>
-      <Stack padding={3} spacing={3} sx={{ bgcolor: 'container.light'}}>
-        <Typography align='center' variant='h2'>{props.jha.activity + ' steps'}</Typography>
+    <Box sx={CardStyles.card}>
+      <Stack padding={3} spacing={3} sx={{ bgcolor: 'secondary.main'}}>
+        <Typography align='center' variant='h4'>{props.jha.title + ' Steps'}</Typography>
+        <StepForm jha={props.jha} refreshCallbackFn={() => { props.refreshCallbackFn(); refreshStepList(); }}/>
       </Stack>
       {
         allSteps.map((step, index) => {
           return (
             <StepCard
               key={index.toString()}
+              jha={props.jha}
               step={step}
-              refreshCallbackFn={refreshStepList}
+              refreshCallbackFn={() => {props.refreshCallbackFn(); refreshStepList();}}
             />
           );
         })
       }
-    </>
+    </Box>
   );
 }
 

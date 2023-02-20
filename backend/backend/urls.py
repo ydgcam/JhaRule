@@ -17,6 +17,8 @@ from django.contrib import admin
 from django.urls import path,include               
 from rest_framework import routers                 
 from jha import views
+from django.conf.urls.static import static
+from . import settings
 
 router = routers.DefaultRouter()                   
 router.register(r'jhas', views.JhasView)
@@ -30,4 +32,4 @@ urlpatterns = [
     path('jhas/<str:jha_id>/steps', views.getStepsForJha, name='getStepsForJha'),
     path('jhas/<str:column_name>/<str:value>', views.queryJhasByCol, name='queryJhasByCol'),
     path('steps/<str:step_id>/hazards', views.getHazardsForStep, name='getHazardsForStep'),          
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

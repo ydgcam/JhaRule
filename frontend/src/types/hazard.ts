@@ -14,5 +14,3 @@ export type Hazard = {
   risk: string,
   control: string,
 }
-
-export type NewHazardData = Omit<Hazard, 'uid'>

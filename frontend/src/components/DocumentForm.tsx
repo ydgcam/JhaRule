@@ -1,6 +1,6 @@
 import { Grid, TextField, Stack, Button, Typography, Autocomplete, Chip, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useState } from "react";
-import { JhaFE } from "../types/jha";
+import { JhaFE, NewJhaData } from "../types/jha";
 import { DoButton, EditButton } from "./Inputs";
 import { StringFunctions } from "../types/utils";
 import * as Yup from 'yup';
@@ -74,7 +74,7 @@ const DocumentForm = (props: DocumentFormProps): JSX.Element => {
     required_training: [], 
     required_ppe: [], 
     signatures: [],
-  }
+  } as NewJhaData
 
   const renderButton = (): JSX.Element => {
     return props.jha ?
@@ -112,43 +112,43 @@ const DocumentForm = (props: DocumentFormProps): JSX.Element => {
               <Form onSubmit={handleSubmit}>
                 <DialogContent>
                   <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                      <TextField required name="title" label="Title" variant="filled" color="primary"
+                    <Grid item xs={6}>
+                      <TextField fullWidth required name="title" label="Title" variant="filled" color="primary"
                           value={values.title} onChange={handleChange} onBlur={handleBlur}
                           helperText={(errors.title && touched.title) && errors.title} FormHelperTextProps={{ error: true }} />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField required name="author" label="Author" variant="filled" color="primary"
+                    <Grid item xs={6}>
+                      <TextField fullWidth required name="author" label="Author" variant="filled" color="primary"
                           value={values.author} onChange={handleChange} onBlur={handleBlur}
                           helperText={(errors.author && touched.author) && errors.author} FormHelperTextProps={{ error: true }} />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField required name="company" label="Company" variant="filled" color="primary"
+                    <Grid item xs={6}>
+                      <TextField fullWidth required name="company" label="Company" variant="filled" color="primary"
                           value={values.company} onChange={handleChange} onBlur={handleBlur}
                           helperText={(errors.company && touched.company) && errors.company} FormHelperTextProps={{ error: true }} />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField name="department" label="Department" variant="filled" color="primary"
+                    <Grid item xs={6}>
+                      <TextField fullWidth name="department" label="Department" variant="filled" color="primary"
                           value={values.department} onChange={handleChange} onBlur={handleBlur}
                           helperText={(errors.department && touched.department) && errors.department} FormHelperTextProps={{ error: true }} />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField required name="activity" label="Activity" variant="filled" color="primary"
+                    <Grid item xs={6}>
+                      <TextField required fullWidth name="activity" label="Activity" variant="filled" color="primary"
                           value={values.activity} onChange={handleChange} onBlur={handleBlur}
                           helperText={(errors.activity && touched.activity) && errors.activity} FormHelperTextProps={{ error: true }} />
                     </Grid>
-                    <Grid item xs={12}>
-                      <TextField name="supervisor" label="Supervisor" variant="filled" color="primary"
+                    <Grid item xs={6}>
+                      <TextField fullWidth name="supervisor" label="Supervisor" variant="filled" color="primary"
                           value={values.supervisor} onChange={handleChange} onBlur={handleBlur}
                           helperText={(errors.supervisor && touched.supervisor) && errors.supervisor} FormHelperTextProps={{ error: true }} />
                     </Grid>
-                    <Grid item xs={12}>
+                    <Grid item xs={6}>
                       <DatePicker openTo="day" value={date} onChange={(newValue) => { setDate(newValue); }} 
                         renderInput={(params) => <TextField {...params} required variant="filled" color='primary'/>}
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <Autocomplete multiple id="signatures" options={values.signatures} freeSolo onChange={(e, val) => values.signatures = val} getOptionLabel={(option) => option} 
+                      <Autocomplete multiple defaultValue={values.signatures} id="signatures" options={values.signatures} freeSolo onChange={(e, val) => values.signatures = val} getOptionLabel={(option) => option} 
                         renderInput={(params) => (<TextField {...params} variant="filled" label="Signatures" placeholder="Signatures"/>)}
                         renderTags={(value: readonly string[], getTagProps) =>
                           value.map((option: string, index: number) => (
@@ -158,7 +158,7 @@ const DocumentForm = (props: DocumentFormProps): JSX.Element => {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <Autocomplete multiple id="ppe" options={values.required_ppe} freeSolo onChange={(e, val) => values.required_ppe = val} getOptionLabel={(option) => option} 
+                      <Autocomplete multiple defaultValue={values.required_ppe} id="ppe" options={values.required_ppe} freeSolo onChange={(e, val) => values.required_ppe = val} getOptionLabel={(option) => option} 
                         renderInput={(params) => (<TextField {...params} variant="filled" label="Protective Equipment" placeholder="Equipment"/>)}
                         renderTags={(value: readonly string[], getTagProps) =>
                           value.map((option: string, index: number) => (
@@ -168,7 +168,7 @@ const DocumentForm = (props: DocumentFormProps): JSX.Element => {
                       />
                     </Grid>
                     <Grid item xs={12}>
-                      <Autocomplete multiple id="training" options={values.required_training} freeSolo onChange={(e, val) => values.required_training = val} getOptionLabel={(option) => option} 
+                      <Autocomplete defaultValue={values.required_training} multiple id="training" options={values.required_training} freeSolo onChange={(e, val) => values.required_training = val} getOptionLabel={(option) => option} 
                         renderInput={(params) => (<TextField {...params} variant="filled" label="Training Required" placeholder="Training"/>)}
                         renderTags={(value: readonly string[], getTagProps) =>
                           value.map((option: string, index: number) => (

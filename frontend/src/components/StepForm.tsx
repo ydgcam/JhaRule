@@ -2,11 +2,9 @@ import { useState } from 'react';
 import * as Yup from 'yup';
 import { createStep, updateStep } from '../services/step-service';
 import { StepFE } from '../types/step';
-import { v4 as uuidv4 } from 'uuid'; 
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, Stack, TextField, Typography } from '@mui/material';
 import { EditButton, DoButton, CancelButton, LoadingWheel } from './Inputs';
-import { Formik } from 'formik';
-import { Form } from 'react-router-dom';
+import { Formik, Form } from 'formik';
 import { JhaFE } from '../types/jha';
 import { PhotoCamera } from '@mui/icons-material';
 
@@ -26,35 +24,35 @@ interface StepFormProps { jha: JhaFE, refreshCallbackFn: () => unknown, step?: S
 const StepForm = (props: StepFormProps) => {
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [photo, setPhoto] = useState<File | null>(props.step ? props.step.photo : null);
+  const [photo, setPhoto] = useState<File | string>(props.step?.photo || '');
   const toggleDialog = () => setModalOpen(!modalOpen);
 
-  const submit = (formInfo: any) => { return props.step ? edit(formInfo) : create(formInfo); };
-  const create = (data: any) => { return createStep(data, props.refreshCallbackFn); }; 
-  const edit = (data: any) => { return updateStep(data, props.refreshCallbackFn); }; 
+  const submit = (formInfo: any, photo: File | string) => { return props.step ? edit(formInfo, photo) : create(formInfo, photo); };
+  const create = (data: any, photo: File | string) => { return createStep(data, photo, props.refreshCallbackFn); }; 
+  const edit = (data: any, photo: File | string) => { return updateStep(data, photo, props.refreshCallbackFn); }; 
 
   const stepVals = props.step ? 
   { 
-    uid: props.step.uid, jha_id: props.step.jha_id, title: props.step.title, 
-    step_num: props.step.step_num, description: props.step.description, photo: photo
+    uid: props.step.uid, jha_id: props.jha.uid, title: props.step.title, 
+    step_num: props.step.step_num, description: props.step.description || '',
   } 
   : 
   { 
-    uid: uuidv4(), jha_id: props.jha.uid, title: '', step_num: '', description: '', photo: photo, 
+    jha_id: props.jha.uid, title: '', step_num: props.jha.steps.length + 1, description: ''
   };
   
   const renderButton = (): JSX.Element => {
     return props.step ?
       <EditButton text='this step' fn={toggleDialog} /> :
-      <DoButton text='Add Hazard' fn={toggleDialog} />;
+      <DoButton text='Add Step' fn={toggleDialog} />;
   };
 
-  const renderTitle = (): string => { return (props.step ? 'Edit ' : 'Create ') + 'Hazard'; };
+  const renderTitle = (): string => { return (props.step ? 'Edit ' : 'Create ') + 'Step'; };
 
   return (
     <>
       {renderButton()}
-      <Dialog open={modalOpen} onClose={toggleDialog} maxWidth='md' fullWidth>
+      <Dialog open={modalOpen} onClose={toggleDialog} maxWidth='sm'>
         <DialogTitle>
           {<div><Typography variant='h4' align='center'>{renderTitle()}</Typography></div>}
         </DialogTitle>
@@ -63,7 +61,7 @@ const StepForm = (props: StepFormProps) => {
           validationSchema={FormValidator}
           onSubmit={(values, { setSubmitting }) => {
             setSubmitting(true);
-            submit(values).then((res) => { setSubmitting(false); setModalOpen(false); })
+            submit(values, photo).then((res) => { setSubmitting(false); setModalOpen(false); })
           }}
         >
           {({
@@ -79,20 +77,21 @@ const StepForm = (props: StepFormProps) => {
             <Form onSubmit={handleSubmit}>
               <DialogContent>
                 <Grid container spacing={2}>
-                  <Grid item xs={12}>
-                    <TextField type='number' required name="step_num" label="step_num" variant="filled" color="primary"
-                      value={values.step_num} onChange={handleChange} onBlur={handleBlur} InputLabelProps={{shrink: true}}
-                      helperText={(errors.step_num && touched.step_num) && errors.step_num} FormHelperTextProps={{ error: true }} 
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField required name="title" label="Title" variant="filled" color="primary"
+                  <Grid item xs={6}>
+                    <TextField fullWidth required name="title" label="Title" variant="filled" color="primary"
                       value={values.title} onChange={handleChange} onBlur={handleBlur}
                       helperText={(errors.title && touched.title) && errors.title} FormHelperTextProps={{ error: true }} 
                     />
                   </Grid>
+                  <Grid item xs={6}>
+                    <TextField fullWidth type='number' required name="step_num" label="Step Number" variant="filled" color="primary"
+                      value={values.step_num} onChange={handleChange} onBlur={handleBlur} InputLabelProps={{shrink: true}}
+                      InputProps={{ inputProps: { min: 1, max: 25 } }}
+                      helperText={(errors.step_num && touched.step_num) && errors.step_num} FormHelperTextProps={{ error: true }} 
+                    />
+                  </Grid>
                   <Grid item xs={12}>
-                    <TextField multiline name="description" label="description" variant="filled" color="primary"
+                    <TextField fullWidth multiline name="description" label="Description" variant="filled" color="primary"
                       value={values.description} onChange={handleChange} onBlur={handleBlur}
                       helperText={(errors.description && touched.description) && errors.description} FormHelperTextProps={{ error: true }} 
                     />

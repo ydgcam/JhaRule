@@ -2,13 +2,13 @@ import { NewStepData, StepBE, StepFE } from '../types/step';
 import { StepError } from "../types/errors";
 import { isErr, Result, toOk } from "../types/result";
 import { readHazardsForStep } from './hazard-service';
-import axios from 'axios';
+import axios, { toFormData } from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { Hazard } from '../types/hazard';
 
-export const createStep = async (data: NewStepData, callback?: () => unknown): Promise<Result<void, StepError>> => {
-  const postData = newToStepDb(data);
-  axios({ method: 'post', url:'steps/', data: {...postData}})
+export const createStep = async (data: NewStepData, photo: File | string, callback?: () => unknown): Promise<Result<void, StepError>> => {
+  const postData = toFormData(newToStepDb(data, photo));
+  axios({ method: 'post', url:'steps/', data: postData, headers: {"Content-Type": "multipart/form-data"}, })
   .then(() => { if (callback) { callback(); } })
   .catch((e) => { return new StepError(e, 'post-request-error-step')});
 }
@@ -29,9 +29,9 @@ export async function readStepsForJha(jha_id: string): Promise<Result<StepFE[], 
   }
 }
 
-export const updateStep = async (data: StepFE, callback?: () => unknown): Promise<Result<void, StepError>> => {
-  const putData = toStepDb(data);
-  axios({ method: 'post', url:`steps/${data.uid}/`, data: {...putData}})
+export const updateStep = async (data: StepFE, photo: File | string, callback?: () => unknown): Promise<Result<void, StepError>> => {
+  const putData = toFormData(toStepDb(data, photo));
+  axios({ method: 'put', url:`steps/${data.uid}/`, data: putData, headers: {"Content-Type": "multipart/form-data"},})
   .then(() => { if (callback) { callback(); } })
   .catch((e) => { return new StepError(e, 'put-request-error-step')});
 }
@@ -42,28 +42,48 @@ export const deleteStep = async (id: string, callback?: () => unknown): Promise<
   .catch((e) => { return new StepError(e, 'delete-request-error-step'); })
 }
 
-export function toStepDb(data: StepFE): StepBE {
-  const img = data.photo instanceof File ? data.photo : null;
-  return {
-    uid: data.uid, 
-    jha_id: data.jha_id, 
-    step_num: data.step_num, 
-    title: data.title, 
-    description: data.description || null,  
-    photo: img
-  };
+export function toStepDb(data: StepFE, photo: File | string): StepBE {
+  if (photo instanceof File) {
+    return {
+      uid: data.uid, 
+      jha_id: data.jha_id, 
+      step_num: data.step_num, 
+      title: data.title, 
+      description: data.description || null,  
+      photo: photo
+    };
+  } 
+  else {
+    return {
+      uid: data.uid, 
+      jha_id: data.jha_id, 
+      step_num: data.step_num, 
+      title: data.title, 
+      description: data.description || null,  
+    };
+  } 
 }
 
-export function newToStepDb(data: NewStepData): StepBE {
-  const img = data.photo instanceof File ? data.photo : null;
-  return {
-    uid: uuidv4(), 
-    jha_id: data.jha_id, 
-    step_num: data.step_num, 
-    title: data.title, 
-    description: data.description || null,  
-    photo: img
-  };
+export function newToStepDb(data: NewStepData, photo: File | string): StepBE {
+  if (photo) {
+    return {
+      uid: uuidv4(), 
+      jha_id: data.jha_id, 
+      step_num: data.step_num, 
+      title: data.title, 
+      description: data.description || null,  
+      photo: photo
+    };
+  }
+  else {
+    return {
+      uid: uuidv4(), 
+      jha_id: data.jha_id, 
+      step_num: data.step_num, 
+      title: data.title, 
+      description: data.description || null,  
+    };
+  }
 }
 
 function toStep(data: any, hazs: Hazard[]): StepFE {
@@ -72,7 +92,7 @@ function toStep(data: any, hazs: Hazard[]): StepFE {
     jha_id: data.jha_id, 
     step_num: data.step_num, 
     title: data.title, 
-    description: data.description,  
+    description: data.description,
     hazards: hazs,
     photo: data.photo
   };

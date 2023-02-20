@@ -5,7 +5,7 @@ import { createTheme, responsiveFontSizes } from '@mui/material/styles';
  */
 const Theme = createTheme({
   typography : {
-    fontFamily: ['Roboto', 'Avenir Next', 'Montserrat'].join(',')
+    fontFamily: ['Montserrat'].join(',')
   },
   components : {
     MuiButton : {

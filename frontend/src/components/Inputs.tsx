@@ -178,6 +178,7 @@ export const CardStyles = {
     minWidth: "80%",
     alignSelf: "center",
     background: THEME.palette.primary.light,
+    border: '1px solid black', 
   },
   collapse: {
     minWidth: "100%",
@@ -189,7 +190,7 @@ export const CardStyles = {
     alignItems: "flex-start",
     background: THEME.palette.secondary.main
   },
-  cardContentCollapse: { padding: "2 !important", background: THEME.palette.secondary.main },
+  cardContentCollapse: { background: THEME.palette.container.main },
   gridItem: { alignSelf: "center", background: THEME.palette.secondary.main },
   alert: {
     maxWidth: "100%",
