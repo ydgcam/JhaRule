@@ -6,6 +6,28 @@
 /.pnp
 .pnp.js
 
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Database
+/db/db.sqlite3
+
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
 # testing
 /coverage
 
@@ -22,4 +44,7 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-/backend/db.sqlite3
+
+# Django stuff:
+*.log
+*.pot

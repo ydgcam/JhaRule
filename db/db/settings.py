@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'jha',
+    'jharuler',
     'corsheaders',
     'rest_framework',
 ]
@@ -61,7 +61,7 @@ CORS_ORIGIN_WHITELIST = [
      'http://localhost:3000'
 ]
 
-ROOT_URLCONF = 'backend.urls'
+ROOT_URLCONF = 'db.urls'
 
 TEMPLATES = [
     {
@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend.wsgi.application'
+WSGI_APPLICATION = 'db.wsgi.application'
 
 
 # Database
